@@ -1,0 +1,731 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+
+:root{
+  --cr:#8B1A4A;--cr2:#6B1238;--cr3:#B5356A;
+  --fo:#2C4A2E;--fo2:#3D6B40;
+  --cm:#F5F2EB;--cm2:#EDE9E0;
+  --td:#1A1208;--tm:#4A3728;--tmu:#8A7A6A;
+  --bd:#D4CEC4;--wh:#FFFFFF;
+}
+
+.outer{
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:20px 0 32px;
+  background:var(--color-background-tertiary,#f0ede6);
+  min-height:680px;
+}
+
+.phone{
+  width:320px;
+  height:620px;
+  border-radius:40px;
+  background:#111;
+  box-shadow:0 0 0 1px rgba(0,0,0,0.25),0 24px 60px rgba(0,0,0,0.28),inset 0 0 0 1.5px rgba(255,255,255,0.08);
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.notch{
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  width:88px;height:22px;background:#111;border-radius:0 0 14px 14px;
+  z-index:999;
+}
+
+.screen{
+  position:absolute;inset:0;border-radius:40px;overflow:hidden;
+  background:var(--cr);
+}
+
+/* ── PAGES ── */
+.page{
+  position:absolute;inset:0;
+  will-change:transform,opacity;
+  border-radius:40px;
+  overflow:hidden;
+}
+
+/* ── SPLASH ── */
+#pg-splash{
+  background:var(--cr);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:30;
+}
+.sp-bg{
+  position:absolute;
+  font-family:'Playfair Display',serif;font-size:160px;font-weight:900;
+  color:rgba(255,255,255,0.045);white-space:nowrap;letter-spacing:-0.05em;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+  animation:bgd 8s ease-in-out infinite alternate;
+}
+@keyframes bgd{from{transform:translate(-53%,-50%)}to{transform:translate(-47%,-50%)}}
+
+.sp-logo{position:relative;z-index:2;text-align:center}
+.sp-logo-row{
+  font-size:46px;line-height:1;
+  display:inline-flex;align-items:baseline;
+  letter-spacing:-0.01em;
+}
+.sp-br{
+  font-family:'DM Sans',sans-serif;font-weight:300;color:#fff;
+  opacity:0;transition:opacity 0.15s;
+}
+.sp-br.vis{opacity:1}
+.sp-tw{display:inline-flex;align-items:baseline;position:relative}
+.sp-cur{
+  display:inline-block;width:2px;height:0.75em;background:rgba(255,255,255,0.8);
+  margin-left:1px;vertical-align:middle;
+  animation:bl 0.5s step-end infinite;
+}
+.sp-cur.off{display:none}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+.sp-ch{
+  display:inline-block;
+  font-family:'DM Sans',sans-serif;font-weight:300;color:#fff;
+}
+.sp-ch.si{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:400;
+  color:rgba(255,255,255,0.88);
+}
+.sp-tag{
+  margin-top:16px;font-family:'Playfair Display',serif;font-style:italic;
+  font-size:12px;color:rgba(255,255,255,0);letter-spacing:0.02em;
+  transition:color 0.8s ease;
+}
+.sp-tag.vis{color:rgba(255,255,255,0.58)}
+.sp-bar{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:rgba(255,255,255,0.1);
+}
+.sp-bar-f{height:100%;width:0;background:rgba(255,255,255,0.38)}
+
+/* ── LOGIN ── */
+#pg-login{
+  background:var(--cm);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  z-index:20;
+  transform:translateY(100%);
+  opacity:0;
+}
+#pg-login.enter{
+  animation:pgUp 0.55s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes pgUp{to{transform:translateY(0);opacity:1}}
+
+.lg-bg{
+  position:absolute;top:0;left:-8%;
+  font-family:'Playfair Display',serif;font-size:120px;font-weight:900;
+  line-height:0.85;color:rgba(0,0,0,0.04);pointer-events:none;z-index:0;
+  white-space:nowrap;transform:rotate(-6deg);
+}
+.lg-inner{
+  position:relative;z-index:1;
+  padding:44px 22px 28px;
+  height:100%;
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.lg-inner::-webkit-scrollbar{display:none}
+.lg-logo{margin-bottom:28px}
+.lg-logo-txt{
+  font-family:'Playfair Display',serif;font-size:26px;font-weight:400;
+  color:var(--fo);letter-spacing:-0.02em;
+}
+.lg-logo-txt .lb{font-family:'DM Sans',sans-serif;font-weight:300}
+.lg-logo-txt .lin{font-weight:900}
+.lg-logo-txt .ld{font-style:italic}
+.lg-logo-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--tmu);margin-top:2px}
+.lg-ttl{font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--cr);margin-bottom:22px}
+.fl{margin-bottom:18px}
+.fl-lbl{font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--tm);margin-bottom:6px;display:block}
+.fl-inp{
+  width:100%;border:none;border-bottom:1px solid var(--bd);background:transparent;
+  padding:8px 0;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--td);
+  outline:none;
+}
+.fl-inp::placeholder{color:var(--tmu);font-size:12px}
+.fgt{text-align:right;margin-top:4px;font-size:10px;color:var(--cr);cursor:pointer;font-style:italic;font-family:'Playfair Display',serif}
+.btn-lg{
+  width:100%;padding:13px;background:var(--cr);color:#fff;border:none;
+  border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  cursor:pointer;margin-top:6px;letter-spacing:0.02em;
+  transition:transform 0.1s;
+}
+.btn-lg:active{transform:scale(0.98)}
+.dvd{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--tmu);font-size:10px}
+.dvd::before,.dvd::after{content:'';flex:1;height:1px;background:var(--bd)}
+.soc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-soc{
+  padding:10px;border:1px solid var(--bd);background:transparent;border-radius:50px;
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:var(--tm);cursor:pointer;
+}
+.lg-foot{margin-top:auto;padding-top:18px;text-align:center}
+.lg-foot p{font-size:11px;color:var(--tmu)}
+.lg-foot a{color:var(--cr);font-weight:500;cursor:pointer}
+.lg-terms{font-size:9px;color:var(--tmu);text-align:center;margin-top:10px;line-height:1.5}
+
+/* stagger */
+.lg-inner > *{opacity:0;transform:translateY(12px)}
+#pg-login.entered .lg-inner > *{
+  animation:stg 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+#pg-login.entered .lg-inner>*:nth-child(1){animation-delay:.04s}
+#pg-login.entered .lg-inner>*:nth-child(2){animation-delay:.10s}
+#pg-login.entered .lg-inner>*:nth-child(3){animation-delay:.16s}
+#pg-login.entered .lg-inner>*:nth-child(4){animation-delay:.22s}
+#pg-login.entered .lg-inner>*:nth-child(5){animation-delay:.28s}
+#pg-login.entered .lg-inner>*:nth-child(6){animation-delay:.34s}
+#pg-login.entered .lg-inner>*:nth-child(7){animation-delay:.40s}
+#pg-login.entered .lg-inner>*:nth-child(8){animation-delay:.46s}
+@keyframes stg{to{opacity:1;transform:translateY(0)}}
+
+/* ── HOME ── */
+#pg-home{
+  background:var(--cm);
+  display:flex;flex-direction:column;
+  z-index:10;
+  transform:translateY(100%);
+  opacity:0;
+}
+#pg-home.enter{animation:pgUp 0.5s cubic-bezier(0.22,1,0.36,1) forwards}
+
+.hm-scroll{flex:1;overflow-y:auto;padding-bottom:60px}
+.hm-scroll::-webkit-scrollbar{display:none}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(245,242,235,0.88);
+  border-bottom:1px solid rgba(212,206,196,0.38);
+  padding:38px 16px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tl{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;color:var(--fo)}
+.tl .tlb{font-family:'DM Sans',sans-serif;font-weight:300}
+.tl .tli{font-weight:900}
+.tl .tld{font-style:italic}
+.tmeta{font-size:9px;color:var(--tmu);position:absolute;left:50%;transform:translateX(-50%)}
+.av{width:28px;height:28px;border-radius:50%;background:var(--fo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+
+.hero{
+  margin:10px;border-radius:14px;background:var(--fo);padding:18px;
+  position:relative;overflow:hidden;cursor:pointer;
+  transition:transform 0.2s;
+}
+.hero:active{transform:scale(0.98)}
+.hero-bnum{
+  position:absolute;right:-6px;top:-14px;font-family:'Playfair Display',serif;
+  font-size:130px;font-weight:900;color:rgba(255,255,255,0.055);line-height:1;pointer-events:none;
+}
+.hero-tag{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.42);margin-bottom:8px}
+.hero-ttl{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;line-height:1.28;margin-bottom:8px}
+.hero-mt{font-size:10px;color:rgba(255,255,255,0.45)}
+
+.sh{padding:18px 14px 8px;display:flex;align-items:baseline;justify-content:space-between}
+.sh-t{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--td)}
+.sh-l{font-size:10px;color:var(--cr);cursor:pointer}
+
+.hsc{padding:0 14px;display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.hsc::-webkit-scrollbar{display:none}
+.mc{
+  flex:0 0 110px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  height:130px;transition:transform 0.2s;
+}
+.mc:nth-child(1){background:var(--cr2)}
+.mc:nth-child(2){background:#3D6B40}
+.mc:nth-child(3){background:#5A3A6B}
+.mc:active{transform:scale(0.94)}
+.mc-bg{position:absolute;inset:0;font-family:'Playfair Display',serif;font-size:55px;font-weight:900;color:rgba(255,255,255,0.07);display:flex;align-items:flex-end;padding:6px;line-height:1;pointer-events:none}
+.mc-in{position:relative;z-index:1;padding:10px;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.mc-tag{font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:3px;background:rgba(0,0,0,0.18);display:inline-block;padding:2px 5px;border-radius:3px;width:fit-content}
+.mc-tt{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:#fff;line-height:1.3}
+.mc-sb{font-size:9px;color:rgba(255,255,255,0.48);margin-top:2px}
+
+.art-sec{padding:0 14px}
+.ai{border-bottom:1px solid var(--bd);overflow:hidden}
+.ai-hd{display:flex;align-items:center;padding:11px 0;cursor:pointer;gap:10px}
+.ai-hd:active{opacity:0.6}
+.ai-n{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--bd);width:22px;flex-shrink:0;line-height:1}
+.ai-nm{flex:1}
+.ai-nm strong{display:block;font-size:13px;font-weight:500;color:var(--td)}
+.ai-nm span{font-size:10px;color:var(--tmu)}
+.ai-cv{font-size:11px;color:var(--tmu);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+.ai.open .ai-cv{transform:rotate(180deg)}
+.ai-body{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1)}
+.ai.open .ai-body{max-height:120px}
+.ai-cnt{padding:0 0 12px 32px}
+.pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.pill{font-size:9px;padding:3px 8px;border-radius:20px;border:1px solid var(--bd);color:var(--tmu)}
+.ai-news{font-size:11px;color:var(--cr);font-weight:500;font-family:'Playfair Display',serif;font-style:italic}
+
+.lst-row{padding:0 14px;display:flex;gap:10px}
+.lc{flex:1;border:1px solid var(--bd);border-radius:12px;padding:11px;background:#fff;cursor:pointer;transition:transform 0.2s}
+.lc:active{transform:scale(0.96)}
+.lc-ic{font-size:14px;margin-bottom:6px;opacity:0.45}
+.lc strong{display:block;font-size:12px;font-weight:500;color:var(--td)}
+.lc span{font-size:9px;color:var(--tmu)}
+.lc-add{flex:0 0 38px;border:1px dashed var(--bd);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tmu);cursor:pointer}
+
+.cc{
+  margin:0 14px 8px;border-radius:12px;background:#fff;border:1px solid var(--bd);
+  padding:11px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;
+  position:relative;overflow:hidden;transition:transform 0.18s;
+}
+.cc:active{transform:scale(0.98)}
+.cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cr);border-radius:0}
+.cc.grn::before{background:var(--fo)}
+.cc-th{width:36px;height:46px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:8px;color:rgba(255,255,255,0.55);text-align:center;padding:3px;line-height:1.2}
+.cc-th.rd{background:var(--cr2)}
+.cc-th.gn{background:var(--fo)}
+.cc-info{flex:1;min-width:0}
+.cc-cat{font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--tmu);margin-bottom:2px}
+.cc-ttl{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--td);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb{margin-top:4px;height:2px;background:var(--bd);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px}
+.cc-ply{width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:10px;flex-shrink:0}
+
+.qb{margin:18px 14px;padding:22px 18px;background:var(--cr);border-radius:14px;position:relative;overflow:hidden}
+.qb-bg{position:absolute;top:-14px;right:6px;font-family:'Playfair Display',serif;font-size:120px;font-weight:900;color:rgba(255,255,255,0.065);line-height:1;pointer-events:none}
+.qb-t{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#fff;line-height:1.65;position:relative;z-index:1}
+.qb-a{margin-top:12px;font-size:10px;font-weight:500;color:rgba(255,255,255,0.52);letter-spacing:0.05em;text-transform:uppercase}
+
+.st-row{padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stc{border-radius:12px;padding:13px;text-align:center}
+.stc.cr{background:var(--cr)}
+.stc.fo{background:var(--fo)}
+.st-n{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#fff;line-height:1}
+.st-l{font-size:9px;color:rgba(255,255,255,0.55);margin-top:3px;line-height:1.4}
+
+.sg-lst{padding:0 14px}
+.sg-it{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.sg-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:#fff}
+.sg-av.cr{background:var(--cr2)}
+.sg-av.fo{background:var(--fo)}
+.sg-av.pu{background:#5A3A6B}
+.sg-av.bl{background:#2A4A5A}
+.sg-inf{flex:1}
+.sg-inf strong{display:block;font-size:12px;font-weight:500;color:var(--td)}
+.sg-inf span{font-size:9px;color:var(--tmu)}
+.btn-fw{font-size:9px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:5px 11px;border-radius:20px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-fw.ing{background:var(--cr);color:#fff;border:1px solid var(--cr)}
+.btn-fw.seg{background:transparent;color:var(--cr);border:1px solid var(--cr)}
+
+.cat-grid{padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ccat{border-radius:12px;padding:13px;overflow:hidden;position:relative;cursor:pointer;min-height:66px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform 0.18s}
+.ccat:active{transform:scale(0.96)}
+.ccat.c1{background:var(--cr)}
+.ccat.c2{background:var(--fo)}
+.ccat.c3{background:#2A3A4A}
+.ccat.c4{background:#5A3A2A}
+.ccat-bn{position:absolute;right:-5px;bottom:-8px;font-family:'Playfair Display',serif;font-size:50px;font-weight:900;color:rgba(255,255,255,0.1);line-height:1}
+.ccat-t{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#fff;position:relative;z-index:1}
+.ccat-c{font-size:9px;color:rgba(255,255,255,0.48);position:relative;z-index:1;margin-top:1px}
+
+.srch{margin:18px 14px 6px;background:#fff;border:1px solid var(--bd);border-radius:50px;padding:9px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.srch span{font-size:11px;color:var(--tmu)}
+
+.bnav{
+  position:sticky;bottom:0;
+  background:rgba(245,242,235,0.93);
+  border-top:1px solid rgba(212,206,196,0.45);
+  display:flex;padding:8px 0 12px;flex-shrink:0;
+}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.ni-ic{font-size:16px;opacity:0.3}
+.ni.act .ni-ic{opacity:1;color:var(--cr)}
+.ni-lb{font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--tmu)}
+.ni.act .ni-lb{color:var(--cr)}
+
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity 0.55s ease,transform 0.55s cubic-bezier(0.22,1,0.36,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* modal */
+.modal-ov{
+  position:absolute;inset:0;border-radius:40px;overflow:hidden;
+  background:rgba(0,0,0,0);z-index:100;
+  display:flex;align-items:flex-end;pointer-events:none;
+  transition:background 0.3s;
+}
+.modal-ov.open{background:rgba(0,0,0,0.45);pointer-events:auto}
+.modal-sh{
+  width:100%;background:var(--cm);border-radius:20px 20px 0 0;
+  padding:16px 18px 32px;transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  max-height:72%;overflow-y:auto;position:relative;
+}
+.modal-sh::-webkit-scrollbar{display:none}
+.modal-ov.open .modal-sh{transform:translateY(0)}
+.mh{width:28px;height:3px;background:var(--bd);border-radius:2px;margin:0 auto 14px}
+.m-ttl{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--td);margin-bottom:4px}
+.m-sub{font-size:11px;color:var(--tmu);margin-bottom:14px;line-height:1.5}
+.m-cls{position:absolute;top:12px;right:14px;width:26px;height:26px;border-radius:50%;background:var(--cm2);border:none;cursor:pointer;font-size:13px;color:var(--tm);display:flex;align-items:center;justify-content:center}
+.ci{padding:10px 0;border-bottom:1px solid var(--bd);display:flex;gap:10px;align-items:flex-start}
+.ct{width:36px;height:46px;border-radius:6px;flex-shrink:0;background:var(--cr2)}
+.ct.g{background:var(--fo)}
+.ct.p{background:#5A3A6B}
+.ci-i strong{display:block;font-family:'Playfair Display',serif;font-size:13px;color:var(--td);line-height:1.3;margin-bottom:3px}
+.ci-i small{font-size:10px;color:var(--tmu)}
+
+/* nav indicator labels below phone */
+.nav-labels{
+  display:flex;justify-content:center;gap:6px;
+  padding:12px 0 0;
+  flex-wrap:wrap;
+}
+.nav-lbl{
+  font-size:10px;color:var(--color-text-secondary);
+  background:var(--color-background-secondary);
+  border:0.5px solid var(--color-border-tertiary);
+  border-radius:20px;padding:3px 10px;
+  cursor:pointer;transition:background 0.15s,color 0.15s;
+  font-family:var(--font-sans);
+}
+.nav-lbl.active-lbl{
+  background:var(--color-text-primary);
+  color:var(--color-background-primary);
+  border-color:var(--color-text-primary);
+}
+</style>
+
+<h2 class="sr-only">Vista previa interactiva de la app [índice] con splash, login y home navegables</h2>
+
+<div class="outer">
+  <div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="screen" id="screen">
+
+        <!-- SPLASH -->
+        <div class="page" id="pg-splash">
+          <div class="sp-bg">índice</div>
+          <div class="sp-logo">
+            <div class="sp-logo-row">
+              <span class="sp-br" id="spBrL">[</span>
+              <span class="sp-tw" id="spTw"></span>
+              <span class="sp-cur" id="spCur"></span>
+              <span class="sp-br" id="spBrR">]</span>
+            </div>
+            <div class="sp-tag" id="spTag">Lo que inspira a quienes crean</div>
+          </div>
+          <div class="sp-bar"><div class="sp-bar-f" id="spBarF"></div></div>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="page" id="pg-login">
+          <div class="lg-bg">lo que<br>los<br>inspira</div>
+          <div class="lg-inner">
+            <div class="lg-logo">
+              <div class="lg-logo-txt"><span class="lb">[</span><span class="lin">ín</span><span class="ld">dice</span><span class="lb">]</span></div>
+              <div class="lg-logo-sub">Lo que inspira a quienes crean</div>
+            </div>
+            <div class="lg-ttl">Ingresá</div>
+            <div class="fl">
+              <label class="fl-lbl">Mail</label>
+              <input class="fl-inp" type="email" placeholder="nombre@mail.com">
+            </div>
+            <div class="fl">
+              <label class="fl-lbl">Contraseña</label>
+              <input class="fl-inp" type="password" placeholder="••••••">
+              <div class="fgt">¿Olvidaste tu contraseña?</div>
+            </div>
+            <button class="btn-lg" id="loginBtn">Ingresar</button>
+            <div class="dvd">o ingresá con</div>
+            <div class="soc">
+              <button class="btn-soc">Instagram</button>
+              <button class="btn-soc">Google</button>
+            </div>
+            <div class="lg-foot">
+              <p>¿No tenés cuenta? <a>Registrate →</a></p>
+              <p class="lg-terms">Al ingresar autorizás los <a>Términos y condiciones</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOME -->
+        <div class="page" id="pg-home">
+          <div class="hm-scroll" id="hmScroll">
+            <div class="topbar">
+              <div class="tl"><span class="tlb">[</span><span class="tli">ín</span><span class="tld">dice</span><span class="tlb">]</span></div>
+              <span class="tmeta">Martes 22 · Bs As</span>
+              <div class="av">AG</div>
+            </div>
+
+            <div class="hero rv" id="heroC">
+              <div class="hero-bnum">1</div>
+              <div class="hero-tag">Selección diaria · Literatura · 8 min</div>
+              <div class="hero-ttl">La narrativa del sur en tres voces</div>
+              <div class="hero-mt">Tap para comenzar →</div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Para escuchar</div><span class="sh-l">Ver todo →</span></div>
+            <div class="hsc rv">
+              <div class="mc" onclick="openM('podcast')"><div class="mc-bg">P</div><div class="mc-in"><span class="mc-tag">Podcast</span><div class="mc-tt">El oficio de escribir</div><div class="mc-sb">En vivo</div></div></div>
+              <div class="mc" onclick="openM('audio')"><div class="mc-bg">A</div><div class="mc-in"><span class="mc-tag">Audio-libro</span><div class="mc-tt">Kohan lee a Kohan</div><div class="mc-sb">Ep. 5</div></div></div>
+              <div class="mc" onclick="openM('entre')"><div class="mc-bg">E</div><div class="mc-in"><span class="mc-tag">Entrevista</span><div class="mc-tt">Lucrecia Martel</div><div class="mc-sb">32 min</div></div></div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Tus artistas</div><span class="sh-l">Ver todo →</span></div>
+            <div class="art-sec rv">
+              <div class="ai" id="a1"><div class="ai-hd" onclick="tog('a1')"><span class="ai-n">1</span><div class="ai-nm"><strong>Juana Molina</strong><span>3 novedades</span></div><span class="ai-cv">▾</span></div><div class="ai-body"><div class="ai-cnt"><div class="pill-row"><span class="pill">Música</span><span class="pill">Literatura</span></div><div class="ai-news">3 novedades · 12 publicaciones →</div></div></div></div>
+              <div class="ai" id="a2"><div class="ai-hd" onclick="tog('a2')"><span class="ai-n">2</span><div class="ai-nm"><strong>Mariana Enríquez</strong><span>4 novedades</span></div><span class="ai-cv">▾</span></div><div class="ai-body"><div class="ai-cnt"><div class="pill-row"><span class="pill">Terror</span><span class="pill">Crónicas</span><span class="pill">Cine</span></div><div class="ai-news">4 novedades · 38 publicaciones →</div></div></div></div>
+              <div class="ai" id="a3"><div class="ai-hd" onclick="tog('a3')"><span class="ai-n">3</span><div class="ai-nm"><strong>Martín Kohan</strong><span>2 novedades</span></div><span class="ai-cv">▾</span></div><div class="ai-body"><div class="ai-cnt"><div class="pill-row"><span class="pill">Literatura</span><span class="pill">Ensayo</span></div><div class="ai-news">2 novedades · 9 publicaciones →</div></div></div></div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Tus listas</div><span class="sh-l">Nueva +</span></div>
+            <div class="lst-row rv">
+              <div class="lc"><div class="lc-ic">🔖</div><strong>Pendientes</strong><span>12 guardados</span></div>
+              <div class="lc"><div class="lc-ic">☆</div><strong>Favoritos</strong><span>23 guardados</span></div>
+              <div class="lc-add">+</div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Continuar</div><span class="sh-l">Ver todo →</span></div>
+            <div class="cc rv"><div class="cc-th rd">Literatura</div><div class="cc-info"><div class="cc-cat">Literatura</div><div class="cc-ttl">¿El cine ha muerto?</div><div class="pb"><div class="pf" style="width:90%;background:var(--cr)"></div></div><div style="font-size:9px;color:var(--tmu);margin-top:2px">90% · 5 min restantes</div></div><div class="cc-ply">▶</div></div>
+            <div class="cc grn rv"><div class="cc-th gn">Música</div><div class="cc-info"><div class="cc-cat">Música</div><div class="cc-ttl">El under está de moda</div><div class="pb"><div class="pf" style="width:20%;background:var(--fo)"></div></div><div style="font-size:9px;color:var(--tmu);margin-top:2px">20% · 10 min restantes</div></div><div class="cc-ply">▶</div></div>
+
+            <div class="qb rv">
+              <div class="qb-bg">"</div>
+              <div class="qb-t">La literatura no es una mentira, sino la forma más honesta de decir la verdad.</div>
+              <div class="qb-a">— Mariana Enríquez · Literatura</div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Tu semana</div></div>
+            <div class="st-row rv">
+              <div class="stc cr"><div class="st-n">4</div><div class="st-l">textos leídos esta semana</div></div>
+              <div class="stc fo"><div class="st-n">1h 42'</div><div class="st-l">tiempo de escucha a diario</div></div>
+            </div>
+
+            <div class="sh rv"><div class="sh-t">Artistas sugeridos</div><span class="sh-l">Ver más →</span></div>
+            <div class="sg-lst rv">
+              <div class="sg-it"><div class="sg-av cr">JM</div><div class="sg-inf"><strong>Juana Molina</strong><span>Música · Literatura</span></div><button class="btn-fw ing" onclick="tfw(this)">Siguiendo</button></div>
+              <div class="sg-it"><div class="sg-av fo">ME</div><div class="sg-inf"><strong>Mariana Enríquez</strong><span>Terror · Crónicas</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+              <div class="sg-it"><div class="sg-av pu">DI</div><div class="sg-inf"><strong>Dillom</strong><span>Música · Cine</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+              <div class="sg-it"><div class="sg-av bl">DP</div><div class="sg-inf"><strong>Diego Peretti</strong><span>Cine · Literatura</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+            </div>
+
+            <div class="srch rv"><span style="opacity:0.38;font-size:12px">⌕</span><span>Autores, textos, géneros...</span></div>
+            <div class="sh rv"><div class="sh-t">Categorías</div></div>
+            <div class="cat-grid rv">
+              <div class="ccat c1" onclick="openM('lit')"><div class="ccat-bn">1200</div><div class="ccat-t">Literatura</div><div class="ccat-c">1200 textos</div></div>
+              <div class="ccat c2" onclick="openM('ens')"><div class="ccat-bn">138</div><div class="ccat-t">Ensayos</div><div class="ccat-c">138 textos</div></div>
+              <div class="ccat c3" onclick="openM('pod')"><div class="ccat-bn">63</div><div class="ccat-t">Podcast</div><div class="ccat-c">63 episodios</div></div>
+              <div class="ccat c4" onclick="openM('cro')"><div class="ccat-bn">50</div><div class="ccat-t">Crónicas</div><div class="ccat-c">50 textos</div></div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+
+          <div class="bnav">
+            <div class="ni act"><span class="ni-ic">⌂</span><span class="ni-lb">Inicio</span></div>
+            <div class="ni"><span class="ni-ic">🔖</span><span class="ni-lb">Guardado</span></div>
+            <div class="ni"><span class="ni-ic">▶</span><span class="ni-lb">Escuchar</span></div>
+            <div class="ni"><span class="ni-ic">◯</span><span class="ni-lb">Perfil</span></div>
+          </div>
+        </div>
+
+        <!-- MODAL -->
+        <div class="modal-ov" id="modal" onclick="closeMBg(event)">
+          <div class="modal-sh">
+            <div class="mh"></div>
+            <button class="m-cls" onclick="closeM()">✕</button>
+            <div id="mContent"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- nav pills below phone -->
+    <div class="nav-labels">
+      <span class="nav-lbl active-lbl" id="lbl-splash" onclick="jumpTo('splash')">Splash</span>
+      <span class="nav-lbl" id="lbl-login" onclick="jumpTo('login')">Login</span>
+      <span class="nav-lbl" id="lbl-home" onclick="jumpTo('home')">Home</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const delay = ms => new Promise(r=>setTimeout(r,ms));
+
+// ── TYPEWRITER ───────────────────────────────────────────────
+async function runSplash(){
+  const tw  = document.getElementById('spTw');
+  const cur = document.getElementById('spCur');
+  const brL = document.getElementById('spBrL');
+  const brR = document.getElementById('spBrR');
+  const tag = document.getElementById('spTag');
+  const bar = document.getElementById('spBarF');
+
+  await delay(350);
+  brL.classList.add('vis'); brR.classList.add('vis');
+  await delay(180);
+
+  const sans  = ['í','n','d','i','c','e'];
+  const serif = ['d','i','c','e'];
+  let spans = [];
+
+  for(let c of sans){
+    const s=document.createElement('span');
+    s.className='sp-ch'; s.textContent=c;
+    tw.appendChild(s); spans.push(s);
+    await delay(85+Math.random()*28);
+  }
+  await delay(520);
+
+  for(let i=0;i<4;i++){
+    const l=spans.pop();
+    if(l) tw.removeChild(l);
+    await delay(52+Math.random()*18);
+  }
+  await delay(260);
+
+  for(let c of serif){
+    const s=document.createElement('span');
+    s.className='sp-ch si'; s.textContent=c;
+    tw.appendChild(s); spans.push(s);
+    await delay(88+Math.random()*28);
+  }
+
+  await delay(260);
+  cur.classList.add('off');
+  tag.classList.add('vis');
+  bar.style.transition='width 2.3s ease';
+  bar.style.width='100%';
+  await delay(2500);
+  goLogin();
+}
+
+// ── PAGE TRANSITIONS ─────────────────────────────────────────
+let currentPage = 'splash';
+
+function setLblActive(p){
+  ['splash','login','home'].forEach(k=>{
+    document.getElementById('lbl-'+k).classList.toggle('active-lbl', k===p);
+  });
+}
+
+function goLogin(){
+  const sp = document.getElementById('pg-splash');
+  const lg = document.getElementById('pg-login');
+  sp.style.transition='opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+  sp.style.opacity='0'; sp.style.transform='scale(1.05)';
+  setTimeout(()=>{
+    sp.style.display='none';
+    lg.classList.add('enter');
+    setTimeout(()=>{ lg.classList.add('entered'); },50);
+    currentPage='login'; setLblActive('login');
+  },500);
+}
+
+document.getElementById('loginBtn').addEventListener('click',()=>{
+  const lg = document.getElementById('pg-login');
+  const hm = document.getElementById('pg-home');
+  lg.style.transition='opacity 0.38s ease, transform 0.38s cubic-bezier(0.4,0,0.2,1)';
+  lg.style.opacity='0'; lg.style.transform='translateY(-14px)';
+  setTimeout(()=>{
+    lg.style.display='none';
+    hm.classList.add('enter');
+    currentPage='home'; setLblActive('home');
+    initReveal();
+  },380);
+});
+
+function jumpTo(p){
+  ['splash','login','home'].forEach(k=>{
+    const el=document.getElementById('pg-'+k);
+    el.style.cssText='';
+    el.className='page';
+    if(k==='pg-login') el.className='page';
+  });
+  document.getElementById('pg-splash').style.display='none';
+  document.getElementById('pg-login').style.display='none';
+  document.getElementById('pg-home').style.display='none';
+
+  const target = document.getElementById('pg-'+p);
+  target.style.display='';
+
+  if(p==='splash'){
+    target.style.display='';
+    target.style.opacity='1';
+    target.style.transform='none';
+    currentPage='splash'; setLblActive('splash');
+    // reset splash
+    const tw=document.getElementById('spTw');
+    tw.innerHTML='';
+    document.getElementById('spBrL').classList.remove('vis');
+    document.getElementById('spBrR').classList.remove('vis');
+    document.getElementById('spTag').classList.remove('vis');
+    document.getElementById('spCur').classList.remove('off');
+    document.getElementById('spBarF').style.cssText='';
+    runSplash();
+  } else if(p==='login'){
+    target.style.opacity='1';
+    target.style.transform='translateY(0)';
+    target.classList.add('entered');
+    currentPage='login'; setLblActive('login');
+  } else {
+    target.style.opacity='1';
+    target.style.transform='translateY(0)';
+    currentPage='home'; setLblActive('home');
+    initReveal();
+  }
+}
+
+// ── SCROLL REVEAL ────────────────────────────────────────────
+function initReveal(){
+  const els = document.querySelectorAll('.rv');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('vis'), i*42);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.1, rootMargin:'0px 0px -20px 0px'});
+  els.forEach(el=>obs.observe(el));
+}
+
+// Parallax hero
+document.getElementById('hmScroll').addEventListener('scroll',function(){
+  const s=this.scrollTop;
+  const h=document.getElementById('heroC');
+  if(h) h.style.transform=`translateY(${s*0.2}px) scale(${Math.max(0.97,1-s*0.0002)})`;
+},{passive:true});
+
+// ── ACCORDION ────────────────────────────────────────────────
+function tog(id){ document.getElementById(id).classList.toggle('open'); }
+
+// ── FOLLOW ───────────────────────────────────────────────────
+function tfw(btn){
+  const f=btn.classList.contains('ing');
+  btn.classList.toggle('ing',!f); btn.classList.toggle('seg',f);
+  btn.textContent=f?'Seguir':'Siguiendo';
+}
+
+// ── MODALS ───────────────────────────────────────────────────
+const MD={
+  podcast:{t:'El oficio de escribir',s:'Juana Molina · Ep. 5 · 32 min',items:[{c:'','t':'Ep. 5: La voz como instrumento','d':'32 min · 2026'},{c:'g','t':'Ep. 4: Componer sin partitura','d':'28 min'},{c:'p','t':'Ep. 3: El silencio también habla','d':'24 min'}]},
+  audio:{t:'Kohan lee a Kohan',s:'Martín Kohan · Audio-libro',items:[{c:'','t':'Ciencias Morales – Cap. 1','d':'18 min'},{c:'g','t':'Ciencias Morales – Cap. 2','d':'22 min'}]},
+  entre:{t:'Lucrecia Martel conversa',s:'Entrevista · 45 min',items:[{c:'p','t':'El cine como política','d':'45 min'},{c:'','t':'Zama: diez años después','d':'30 min'}]},
+  lit:{t:'Literatura',s:'1200 textos disponibles',items:[{c:'','t':'Narrativa argentina contemporánea','d':'48 textos'},{c:'g','t':'Nuevas voces del sur','d':'12 textos'}]},
+  ens:{t:'Ensayos',s:'138 textos disponibles',items:[{c:'','t':'Ensayo político y cultural','d':'22 textos'},{c:'g','t':'Filosofía del arte','d':'18 textos'}]},
+  pod:{t:'Podcast',s:'63 episodios',items:[{c:'','t':'El oficio de escribir','d':'12 episodios'},{c:'g','t':'Hablando de profesión','d':'8 episodios'}]},
+  cro:{t:'Crónicas',s:'50 textos disponibles',items:[{c:'p','t':'Crónica urbana','d':'20 textos'},{c:'','t':'Crónica de viaje','d':'15 textos'}]}
+};
+function openM(k){
+  const d=MD[k]; if(!d) return;
+  let h=`<div class="m-ttl">${d.t}</div><div class="m-sub">${d.s}</div>`;
+  d.items.forEach(it=>{ h+=`<div class="ci"><div class="ct ${it.c}"></div><div class="ci-i"><strong>${it.t}</strong><small>${it.d}</small></div></div>`; });
+  document.getElementById('mContent').innerHTML=h;
+  document.getElementById('modal').classList.add('open');
+}
+function closeM(){ document.getElementById('modal').classList.remove('open'); }
+function closeMBg(e){ if(e.target===document.getElementById('modal')) closeM(); }
+
+// Start
+runSplash();
+</script>
