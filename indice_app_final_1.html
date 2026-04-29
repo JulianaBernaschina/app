@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[índice] App</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+
+/* ── Helvetica stack (system) + Playfair como Baskerville-surrogate ── */
+:root{
+  --cr:#8B1A4A;   /* crimson principal */
+  --cr2:#6B1238;  /* crimson profundo */
+  --cr3:rgba(139,26,74,0.18);
+  --fo:#2C4A2E;   /* forest */
+  --fo2:#3D6B40;
+  --cm:#F5F2EB;   /* cream */
+  --cm2:#EDE9E0;
+  --td:#1A1208;
+  --tm:#4A3728;
+  --tmu:#8A7A6A;
+  --bd:#D4CEC4;
+  --hv:'Arial','Helvetica Neue',Helvetica,sans-serif; /* Helvetica system */
+  --bk:'Playfair Display',Georgia,serif;               /* Baskerville-style */
+}
+
+body{font-family:var(--hv);background:#111;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px 0 48px}
+
+.phone{
+  width:360px;height:720px;border-radius:48px;background:#0a0a0a;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 0 0 2px rgba(0,0,0,0.8),
+    0 32px 80px rgba(0,0,0,0.7),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  position:relative;overflow:hidden;flex-shrink:0;
+}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:88px;height:22px;background:#0a0a0a;border-radius:0 0 14px 14px;z-index:999}
+.screen{position:absolute;inset:0;border-radius:48px;overflow:hidden}
+
+/* ── PAGES ── */
+.page{position:absolute;inset:0;border-radius:48px;overflow:hidden;display:none;flex-direction:column}
+.page.active{display:flex}
+.slide-up{animation:slideUp 0.55s cubic-bezier(0.22,1,0.36,1) both}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ══════════════════════════════════════════════
+   SPLASH
+══════════════════════════════════════════════ */
+#pg-splash{
+  background:var(--cr);
+  align-items:center;justify-content:center;
+  display:flex;
+}
+
+/* Glow pulsante */
+.sp-glow{
+  position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(181,53,106,0.45) 0%,transparent 68%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:gp 4s ease-in-out infinite;pointer-events:none;
+}
+@keyframes gp{0%,100%{opacity:0.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:0.9;transform:translate(-50%,-50%) scale(1.18)}}
+
+/* Tipografía de fondo — mezcla Helvetica uppercase + Baskerville */
+.sp-bg-layer{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.sp-bg-word{
+  position:absolute;
+  font-weight:900;
+  color:rgba(255,255,255,0.045);
+  line-height:1;
+  white-space:nowrap;
+}
+.sp-bg-word.hv{font-family:var(--hv);text-transform:uppercase;letter-spacing:-0.04em}
+.sp-bg-word.bk{font-family:var(--bk);font-style:italic;letter-spacing:-0.02em}
+.sp-bg-word.w1{font-size:140px;top:2%;left:-8%;animation:bdrift1 11s ease-in-out infinite alternate}
+.sp-bg-word.w2{font-size:90px;bottom:8%;right:-5%;animation:bdrift2 9s ease-in-out infinite alternate}
+.sp-bg-word.w3{font-size:60px;top:42%;left:5%;opacity:0.03}
+@keyframes bdrift1{from{transform:translateX(0)}to{transform:translateX(4%)}}
+@keyframes bdrift2{from{transform:translateX(0)}to{transform:translateX(-4%)}}
+
+/* Logo typewriter */
+.sp-logo{position:relative;z-index:2;text-align:center}
+.sp-row{
+  font-size:58px;line-height:1;
+  display:inline-flex;align-items:baseline;
+  letter-spacing:-0.01em;color:#fff;
+}
+.sp-br{font-family:var(--hv);font-weight:300;opacity:0;transition:opacity 0.2s;font-size:52px}
+.sp-br.v{opacity:1}
+.sp-typed{display:inline-flex;align-items:baseline}
+.sp-cur{display:inline-block;width:2.5px;height:0.72em;background:rgba(255,255,255,0.85);margin-left:1px;vertical-align:middle;animation:bl 0.5s step-end infinite}
+.sp-cur.off{display:none}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+/* caracteres sans (Helvetica) */
+.ch-s{font-family:var(--hv);font-weight:400;color:#fff;display:inline-block}
+/* caracteres serif-italic (Baskerville/Playfair) */
+.ch-i{font-family:var(--bk);font-style:italic;font-weight:400;color:rgba(255,255,255,0.94);display:inline-block}
+
+.sp-tag{
+  margin-top:18px;
+  font-family:var(--bk);font-style:italic;
+  font-size:13px;color:rgba(255,255,255,0);
+  letter-spacing:0.03em;
+  transition:color 1s;
+}
+.sp-tag.v{color:rgba(255,255,255,0.55)}
+
+.sp-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,0.07)}
+.sp-barf{height:100%;width:0;background:rgba(255,255,255,0.35);transition:none}
+
+/* ══════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════ */
+#pg-login{background:var(--cm)}
+
+/* Fondo tipográfico — Helvetica ultra bold + Baskerville italic superpuestos */
+.lg-bg-layer{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.lg-bg-hv{
+  /* "lo que los inspira" en Helvetica ultra, rotado */
+  position:absolute;top:-12px;left:-14%;
+  font-family:var(--hv);font-size:118px;font-weight:900;
+  line-height:0.82;color:rgba(0,0,0,0.04);
+  white-space:nowrap;transform:rotate(-6deg);
+  text-transform:uppercase;letter-spacing:-0.04em;
+}
+.lg-bg-bk{
+  /* overlay Baskerville italic encima, ligeramente desplazado */
+  position:absolute;top:0px;left:-8%;
+  font-family:var(--bk);font-size:118px;font-weight:400;font-style:italic;
+  line-height:0.82;color:rgba(0,0,0,0.025);
+  white-space:nowrap;transform:rotate(-6deg);
+  letter-spacing:-0.02em;
+}
+
+.lg-inner{position:relative;z-index:1;padding:52px 24px 28px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+.lg-inner::-webkit-scrollbar{display:none}
+
+/* ── Logo en el login — versión correcta: [ín] con sans-bold + dice en baskerville ── */
+.lg-logo{margin-bottom:32px}
+.lg-logo-wrap{
+  display:inline-flex;align-items:baseline;gap:0;
+  font-size:30px;line-height:1;
+}
+.lg-br{font-family:var(--hv);font-weight:300;color:var(--fo);font-size:30px}
+.lg-in{font-family:var(--hv);font-weight:900;color:var(--fo);font-size:30px;letter-spacing:-0.01em}
+/* acento sobre la i */
+.lg-in-accent{font-family:var(--hv);font-weight:900;color:var(--fo)}
+.lg-dice{font-family:var(--bk);font-style:italic;font-weight:400;color:var(--fo);font-size:30px}
+.lg-logo-sub{font-family:var(--bk);font-style:italic;font-size:12px;color:var(--tmu);margin-top:4px}
+
+.lg-ttl{font-family:var(--hv);font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--cr);margin-bottom:22px}
+.fl{margin-bottom:22px}
+.fl-lbl{font-family:var(--hv);font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--tm);margin-bottom:8px;display:block}
+.fl-inp{
+  width:100%;border:none;border-bottom:1.5px solid var(--bd);background:transparent;
+  padding:10px 0;font-family:var(--hv);font-size:14px;color:var(--td);
+  outline:none;transition:border-color 0.2s;
+}
+.fl-inp:focus{border-bottom-color:var(--cr)}
+.fl-inp::placeholder{color:var(--tmu);font-size:13px}
+.fgt{
+  text-align:right;margin-top:6px;
+  font-size:11px;color:var(--cr);cursor:pointer;
+  font-style:italic;font-family:var(--bk);
+}
+.btn-lg{
+  width:100%;padding:15px;background:var(--cr);color:#fff;border:none;
+  border-radius:50px;font-family:var(--hv);font-size:14px;font-weight:500;
+  cursor:pointer;margin-top:8px;letter-spacing:0.03em;
+  transition:transform 0.12s;
+  box-shadow:0 6px 22px rgba(139,26,74,0.3);
+}
+.btn-lg:active{transform:scale(0.97)}
+.dvd{display:flex;align-items:center;gap:10px;margin:20px 0;color:var(--tmu);font-size:10px;font-family:var(--hv)}
+.dvd::before,.dvd::after{content:'';flex:1;height:1px;background:var(--bd)}
+.soc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-soc{
+  padding:12px;border:1.5px solid var(--bd);background:transparent;border-radius:50px;
+  font-family:var(--hv);font-size:12px;font-weight:500;color:var(--tm);cursor:pointer;
+  transition:border-color 0.2s;
+}
+.btn-soc:hover{border-color:var(--cr);color:var(--cr)}
+.lg-foot{margin-top:auto;padding-top:20px;text-align:center}
+.lg-foot p{font-size:12px;color:var(--tmu);font-family:var(--hv)}
+.lg-foot a{color:var(--cr);font-weight:600;cursor:pointer;text-decoration:none}
+.lg-terms{font-size:9px;color:var(--tmu);text-align:center;margin-top:12px;line-height:1.5;font-family:var(--hv)}
+.lg-terms a{text-decoration:underline;cursor:pointer}
+
+/* stagger login */
+.lg-inner>*{opacity:0;transform:translateY(14px)}
+.lg-inner.go>*{animation:stg 0.45s cubic-bezier(0.22,1,0.36,1) forwards}
+.lg-inner.go>*:nth-child(1){animation-delay:.05s}.lg-inner.go>*:nth-child(2){animation-delay:.12s}
+.lg-inner.go>*:nth-child(3){animation-delay:.19s}.lg-inner.go>*:nth-child(4){animation-delay:.26s}
+.lg-inner.go>*:nth-child(5){animation-delay:.33s}.lg-inner.go>*:nth-child(6){animation-delay:.40s}
+.lg-inner.go>*:nth-child(7){animation-delay:.47s}.lg-inner.go>*:nth-child(8){animation-delay:.54s}
+@keyframes stg{to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════════════
+   HOME
+══════════════════════════════════════════════ */
+#pg-home{background:var(--cm)}
+.hm-scroll{flex:1;overflow-y:auto;padding-bottom:68px;position:relative}
+.hm-scroll::-webkit-scrollbar{display:none}
+
+/* top bar */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(245,242,235,0.88);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(212,206,196,0.3);
+  padding:38px 16px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+/* Logo en topbar: misma lógica [ín]dice */
+.tl{display:inline-flex;align-items:baseline;font-size:19px;line-height:1}
+.tl .tlb{font-family:var(--hv);font-weight:300;color:var(--fo)}
+.tl .tli{font-family:var(--hv);font-weight:900;color:var(--fo)}
+.tl .tld{font-family:var(--bk);font-style:italic;font-weight:400;color:var(--fo)}
+.tmeta{font-size:9px;color:var(--tmu);position:absolute;left:50%;transform:translateX(-50%);letter-spacing:0.04em;font-family:var(--hv)}
+.av{width:30px;height:30px;border-radius:50%;background:var(--fo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--hv)}
+
+/* ── HERO ── */
+.hero{
+  margin:12px 12px 0;border-radius:18px;background:var(--fo);
+  padding:22px 18px;position:relative;overflow:hidden;cursor:pointer;
+  transition:transform 0.2s;
+}
+.hero:active{transform:scale(0.98)}
+/* Juego tipográfico en el hero: número gigante Helvetica + texto baskerville */
+.hero-bnum{
+  position:absolute;right:-12px;top:-22px;
+  font-family:var(--hv);font-size:160px;font-weight:900;
+  color:rgba(255,255,255,0.05);line-height:1;pointer-events:none;
+  letter-spacing:-0.05em;
+}
+/* Letras de fondo tipo magazine */
+.hero-bg-letters{
+  position:absolute;bottom:-10px;left:-4px;
+  font-family:var(--bk);font-size:80px;font-weight:900;font-style:italic;
+  color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;
+  letter-spacing:-0.03em;
+  white-space:nowrap;
+}
+.hero-tag{font-family:var(--hv);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.38);margin-bottom:10px;font-weight:400}
+.hero-ttl{font-family:var(--bk);font-size:22px;font-weight:700;color:#fff;line-height:1.28;margin-bottom:10px}
+.hero-mt{font-family:var(--hv);font-size:10px;color:rgba(255,255,255,0.38);letter-spacing:0.04em}
+
+/* section header */
+.sh{padding:20px 16px 8px;display:flex;align-items:baseline;justify-content:space-between}
+.sh-t{font-family:var(--bk);font-size:17px;font-weight:700;color:var(--td)}
+.sh-l{font-family:var(--hv);font-size:10px;color:var(--cr);cursor:pointer}
+
+/* ── horizontal cards "Para escuchar" ── */
+.hsc{padding:0 14px;display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.hsc::-webkit-scrollbar{display:none}
+.mc{
+  flex:0 0 114px;border-radius:14px;overflow:hidden;position:relative;
+  cursor:pointer;height:136px;transition:transform 0.2s;
+}
+.mc:nth-child(1){background:var(--cr2)}
+.mc:nth-child(2){background:#2C4A2E}
+.mc:nth-child(3){background:#3D2A5A}
+.mc:active{transform:scale(0.93)}
+/* letra tipográfica de fondo en cada card — Helvetica bold */
+.mc-bg{
+  position:absolute;inset:0;
+  font-family:var(--hv);font-size:72px;font-weight:900;
+  color:rgba(255,255,255,0.07);
+  display:flex;align-items:flex-end;padding:4px;line-height:1;
+  pointer-events:none;text-transform:uppercase;
+}
+.mc-in{position:relative;z-index:1;padding:10px;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.mc-tag{
+  font-family:var(--hv);font-size:7px;letter-spacing:0.08em;
+  text-transform:uppercase;color:rgba(255,255,255,0.42);
+  margin-bottom:3px;background:rgba(0,0,0,0.2);
+  display:inline-block;padding:2px 6px;border-radius:3px;width:fit-content;
+}
+.mc-live{background:var(--cr)!important;color:#fff!important;opacity:1!important}
+.mc-tt{font-family:var(--bk);font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+.mc-sb{font-family:var(--hv);font-size:9px;color:rgba(255,255,255,0.42);margin-top:2px}
+
+/* ── Player expandido ── */
+.player-expanded{
+  margin:8px 12px 0;border-radius:16px;overflow:hidden;
+  background:#1a0a12;
+  max-height:0;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.4s;
+  opacity:0;pointer-events:none;
+  position:relative;
+}
+/* Fondo tipográfico del player — overlay Helvetica bold */
+.pe-typo-bg{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.pe-typo-bg span{
+  position:absolute;
+  font-weight:900;color:rgba(255,255,255,0.04);
+  line-height:0.85;white-space:nowrap;
+}
+.pe-typo-bg .t1{font-family:var(--hv);font-size:90px;top:-8px;left:-6px;letter-spacing:-0.04em;text-transform:uppercase}
+.pe-typo-bg .t2{font-family:var(--bk);font-size:70px;font-style:italic;bottom:-6px;right:-4px}
+.player-expanded.open{max-height:250px;opacity:1;pointer-events:auto}
+.pe-inner{padding:16px 14px 14px;position:relative;z-index:1}
+.pe-live{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.pe-live-dot{width:6px;height:6px;border-radius:50%;background:#E05577;animation:ld 1.2s ease-in-out infinite}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:0.3}}
+.pe-live-txt{font-family:var(--hv);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45)}
+.pe-tag{font-family:var(--hv);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px}
+.pe-ttl{font-family:var(--bk);font-size:19px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:2px}
+.pe-sub{font-family:var(--hv);font-size:10px;color:rgba(255,255,255,0.38);margin-bottom:14px}
+.pe-prog{height:2px;background:rgba(255,255,255,0.12);border-radius:2px;margin-bottom:6px;overflow:hidden}
+.pe-pf{height:100%;width:45%;background:var(--cr);border-radius:2px}
+.pe-times{display:flex;justify-content:space-between;font-family:var(--hv);font-size:9px;color:rgba(255,255,255,0.3);margin-bottom:14px}
+.pe-ctrl{display:flex;align-items:center;justify-content:center;gap:18px}
+.pe-play{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid rgba(255,255,255,0.18);font-size:13px;color:#fff;transition:background 0.2s}
+.pe-play:active{background:rgba(255,255,255,0.2)}
+.pe-skip{font-size:14px;color:rgba(255,255,255,0.38);cursor:pointer}
+.pe-actions{display:flex;gap:8px;margin-top:12px;justify-content:center}
+.pe-btn{font-family:var(--hv);font-size:9px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.48);cursor:pointer;background:transparent;letter-spacing:0.04em}
+.pe-btn.act{background:var(--cr);border-color:var(--cr);color:#fff}
+
+/* ── Artistas / acordeones ── */
+.art-sec{padding:0 14px}
+.ai{border-bottom:1px solid var(--bd);overflow:hidden}
+.ai-hd{display:flex;align-items:center;padding:12px 0;cursor:pointer;gap:10px}
+/* número en Helvetica bold grande — dato tipográfico */
+.ai-n{font-family:var(--hv);font-size:20px;font-weight:900;color:var(--bd);width:24px;flex-shrink:0;line-height:1}
+.ai-nm{flex:1}
+.ai-nm strong{display:block;font-family:var(--hv);font-size:13px;font-weight:500;color:var(--td)}
+.ai-nm span{font-family:var(--hv);font-size:10px;color:var(--tmu)}
+.ai-cv{font-size:11px;color:var(--tmu);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+.ai.open .ai-cv{transform:rotate(180deg)}
+.ai-body{max-height:0;opacity:0;overflow:hidden;transition:max-height 0.45s cubic-bezier(0.4,0,0.2,1),opacity 0.3s}
+.ai.open .ai-body{max-height:440px;opacity:1}
+
+/* Perfil de artista */
+.artist-profile{background:var(--cm2);border-radius:14px;overflow:hidden;margin:0 0 14px}
+.ap-header{padding:18px 14px 14px;position:relative;overflow:hidden}
+/* Juego tipográfico en header del artista: nombre en Helvetica ultra transparente de fondo, nombre real en Baskerville encima */
+.ap-bg-txt{
+  position:absolute;right:-10px;bottom:-20px;
+  font-family:var(--hv);font-size:72px;font-weight:900;
+  color:rgba(255,255,255,0.06);line-height:1;pointer-events:none;
+  text-transform:uppercase;letter-spacing:-0.04em;
+}
+.ap-bg-bk{
+  position:absolute;left:-6px;top:-10px;
+  font-family:var(--bk);font-size:54px;font-weight:900;font-style:italic;
+  color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;
+  letter-spacing:-0.02em;
+}
+.ap-badge{font-family:var(--hv);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px}
+.ap-name{font-family:var(--bk);font-size:24px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:2px}
+.ap-origin{font-family:var(--hv);font-size:9px;color:rgba(255,255,255,0.38)}
+.ap-stats{display:flex;gap:16px;margin-top:10px}
+.ap-stat-n{font-family:var(--hv);font-size:20px;font-weight:900;color:#fff;line-height:1}
+.ap-stat-l{font-family:var(--hv);font-size:8px;color:rgba(255,255,255,0.38);margin-top:1px;line-height:1.3}
+.ap-tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);background:#fff;overflow-x:auto}
+.ap-tabs::-webkit-scrollbar{display:none}
+.ap-tab{
+  flex:0 0 auto;text-align:center;padding:9px 10px;
+  font-family:var(--hv);font-size:8px;letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--tmu);cursor:pointer;border-bottom:2px solid transparent;
+  transition:all 0.2s;white-space:nowrap;
+}
+.ap-tab.act{color:var(--cr);border-bottom-color:var(--cr)}
+.ap-bio{padding:12px 12px 8px;font-family:var(--hv);font-size:11px;color:var(--tm);line-height:1.65}
+.ap-content{padding:0 10px 10px}
+.ap-item{display:flex;gap:10px;padding:9px 2px;border-bottom:1px solid var(--bd);align-items:flex-start;cursor:pointer}
+.ap-item:last-child{border-bottom:none}
+.ap-thumb{width:34px;height:44px;border-radius:6px;flex-shrink:0}
+.ap-thumb.rd{background:var(--cr2)}
+.ap-thumb.dk{background:#2A1A10}
+.ap-item-tag{font-family:var(--hv);font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--cr);margin-bottom:2px}
+.ap-item-ttl{font-family:var(--bk);font-size:12px;font-weight:700;color:var(--td);line-height:1.3}
+.ap-item-sub{font-family:var(--hv);font-size:9px;color:var(--tmu);margin-top:1px}
+.ap-novedades{font-family:var(--bk);font-style:italic;font-size:10px;color:var(--cr);font-weight:500;padding:10px 12px 4px;display:flex;justify-content:flex-end}
+
+/* ── Listas ── */
+.lst-row{padding:0 14px;display:flex;gap:10px}
+.lc{flex:1;border:1px solid var(--bd);border-radius:14px;padding:12px;background:#fff;cursor:pointer;transition:transform 0.18s}
+.lc:active{transform:scale(0.95)}
+.lc-ic{font-size:14px;margin-bottom:6px;opacity:0.35}
+.lc strong{display:block;font-family:var(--hv);font-size:12px;font-weight:600;color:var(--td)}
+.lc span{font-family:var(--hv);font-size:9px;color:var(--tmu)}
+.lc-add{flex:0 0 40px;border:1.5px dashed var(--bd);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tmu);cursor:pointer}
+
+/* ── Continuar ── */
+.cc{
+  margin:0 12px 8px;border-radius:14px;background:#fff;border:1px solid var(--bd);
+  padding:12px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;
+  position:relative;overflow:hidden;transition:transform 0.18s;
+}
+.cc:active{transform:scale(0.98)}
+.cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cr)}
+.cc.grn::before{background:var(--fo)}
+.cc-th{
+  width:36px;height:46px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--hv);font-size:7px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
+  color:rgba(255,255,255,0.6);text-align:center;padding:3px;line-height:1.3;
+}
+.cc-th.rd{background:var(--cr2)}
+.cc-th.gn{background:var(--fo)}
+.cc-info{flex:1;min-width:0}
+.cc-cat{font-family:var(--hv);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--tmu);margin-bottom:2px}
+.cc-ttl{font-family:var(--bk);font-size:14px;font-weight:700;color:var(--td);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb{margin-top:4px;height:2px;background:var(--cm2);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px}
+.cc-ply{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:10px;flex-shrink:0}
+
+/* ── Quote ── 
+   Juego tipográfico: comilla gigante Helvetica + Baskerville italic para la cita 
+── */
+.qb{
+  margin:16px 12px;padding:24px 18px;
+  background:var(--cr);border-radius:18px;
+  position:relative;overflow:hidden;
+}
+/* Comilla en Helvetica ultra — elemento gráfico dominante */
+.qb-bg-hv{
+  position:absolute;top:-28px;left:-6px;
+  font-family:var(--hv);font-size:200px;font-weight:900;
+  color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;
+  letter-spacing:-0.05em;
+}
+/* Overlay Baskerville italic */
+.qb-bg-bk{
+  position:absolute;bottom:-20px;right:-8px;
+  font-family:var(--bk);font-size:120px;font-weight:900;font-style:italic;
+  color:rgba(255,255,255,0.04);line-height:1;pointer-events:none;
+}
+.qb-t{font-family:var(--bk);font-style:italic;font-size:14px;color:#fff;line-height:1.7;position:relative;z-index:1}
+.qb-a{margin-top:12px;font-family:var(--hv);font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:0.06em;text-transform:uppercase}
+
+/* ── Typo band — ticker con mezcla tipográfica ── */
+.typo-band{
+  padding:0 0;overflow:hidden;height:38px;
+  display:flex;align-items:center;
+  position:relative;
+}
+/* Fondo de relleno sutil */
+.typo-band::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.03)}
+.typo-band-inner{display:flex;white-space:nowrap;animation:ticker 22s linear infinite}
+/* alternamos Helvetica + Baskerville en el ticker */
+.typo-band-inner span{
+  display:inline-block;
+  padding:0 8px;
+  font-size:11px;font-weight:600;color:rgba(0,0,0,0.12);
+  letter-spacing:0.04em;text-transform:uppercase;
+}
+.typo-band-inner span.bk{font-family:var(--bk);font-style:italic;font-weight:900;font-size:13px;text-transform:none;color:rgba(0,0,0,0.1)}
+.typo-band-inner span.hv{font-family:var(--hv)}
+.typo-band-inner span.sep{color:var(--cr);opacity:0.4;font-family:var(--hv)}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── Stats ── */
+.st-row{padding:0 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stc{border-radius:14px;padding:18px;text-align:center;position:relative;overflow:hidden}
+.stc.cr{background:var(--cr)}
+.stc.fo{background:var(--fo)}
+/* número en Helvetica extrabold como elemento gráfico */
+.st-bg-n{
+  position:absolute;bottom:-14px;right:-6px;
+  font-family:var(--hv);font-size:80px;font-weight:900;
+  color:rgba(255,255,255,0.05);line-height:1;pointer-events:none;
+  letter-spacing:-0.04em;
+}
+.st-n{font-family:var(--hv);font-size:32px;font-weight:900;color:#fff;line-height:1;position:relative;z-index:1}
+.st-l{font-family:var(--hv);font-size:9px;color:rgba(255,255,255,0.48);margin-top:4px;line-height:1.4;position:relative;z-index:1}
+
+/* ── Artistas sugeridos ── */
+.sg-lst{padding:0 14px}
+.sg-it{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.sg-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--hv);font-size:12px;font-weight:700;color:#fff;
+}
+.sg-av.cr{background:var(--cr)}
+.sg-av.fo{background:var(--fo)}
+.sg-av.pu{background:#4A2A6B}
+.sg-av.bl{background:#1A3A4A}
+.sg-inf{flex:1}
+.sg-inf strong{display:block;font-family:var(--hv);font-size:12px;font-weight:500;color:var(--td)}
+.sg-inf span{font-family:var(--hv);font-size:9px;color:var(--tmu)}
+.btn-fw{
+  font-family:var(--hv);font-size:9px;font-weight:600;letter-spacing:0.04em;
+  text-transform:uppercase;padding:5px 11px;border-radius:20px;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-fw.ing{background:var(--cr);color:#fff;border:1.5px solid var(--cr)}
+.btn-fw.seg{background:transparent;color:var(--cr);border:1.5px solid var(--cr)}
+
+/* ── Search ── */
+.srch{
+  margin:20px 12px 6px;background:#fff;border:1px solid var(--bd);
+  border-radius:50px;padding:10px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;
+}
+.srch span{font-family:var(--hv);font-size:11px;color:var(--tmu)}
+
+/* ── Categorías ── 
+   Cada card tiene número enorme en Helvetica + nombre en Baskerville
+── */
+.cat-grid{padding:0 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ccat{
+  border-radius:14px;padding:14px 12px;overflow:hidden;
+  position:relative;cursor:pointer;min-height:76px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  transition:transform 0.18s;
+}
+.ccat:active{transform:scale(0.95)}
+.ccat.c1{background:var(--cr)}
+.ccat.c2{background:var(--fo)}
+.ccat.c3{background:#1A3A4A}
+.ccat.c4{background:#3A2A1A}
+/* número de fondo en Helvetica extrabold */
+.ccat-bn{
+  position:absolute;right:-6px;bottom:-12px;
+  font-family:var(--hv);font-size:58px;font-weight:900;
+  color:rgba(255,255,255,0.1);line-height:1;letter-spacing:-0.04em;
+}
+/* letra inicial detrás en Baskerville italic */
+.ccat-bl{
+  position:absolute;left:-4px;top:-8px;
+  font-family:var(--bk);font-size:68px;font-weight:900;font-style:italic;
+  color:rgba(255,255,255,0.06);line-height:1;pointer-events:none;
+}
+.ccat-t{font-family:var(--bk);font-size:14px;font-weight:700;color:#fff;position:relative;z-index:1}
+.ccat-c{font-family:var(--hv);font-size:9px;color:rgba(255,255,255,0.42);position:relative;z-index:1;margin-top:1px;letter-spacing:0.02em}
+
+/* ── Bottom nav ── */
+.bnav{
+  background:rgba(245,242,235,0.94);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid rgba(212,206,196,0.35);
+  display:flex;padding:9px 0 16px;flex-shrink:0;
+}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.ni-ic{font-size:16px;opacity:0.25}
+.ni.act .ni-ic{opacity:1;color:var(--cr)}
+.ni-lb{font-family:var(--hv);font-size:7px;letter-spacing:0.07em;text-transform:uppercase;color:var(--tmu)}
+.ni.act .ni-lb{color:var(--cr)}
+
+/* ── Scroll reveal ── */
+.rv{opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s cubic-bezier(0.22,1,0.36,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* ── Modal ── */
+.modal-ov{
+  position:absolute;inset:0;border-radius:48px;overflow:hidden;
+  background:rgba(0,0,0,0);z-index:200;display:flex;align-items:flex-end;
+  pointer-events:none;transition:background 0.35s;
+}
+.modal-ov.open{background:rgba(0,0,0,0.52);pointer-events:auto}
+.modal-sh{
+  width:100%;background:var(--cm);border-radius:22px 22px 0 0;
+  padding:16px 18px 38px;transform:translateY(100%);
+  transition:transform 0.42s cubic-bezier(0.22,1,0.36,1);
+  max-height:76%;overflow-y:auto;position:relative;
+}
+.modal-sh::-webkit-scrollbar{display:none}
+.modal-ov.open .modal-sh{transform:translateY(0)}
+.mh{width:30px;height:3px;background:var(--bd);border-radius:2px;margin:0 auto 16px}
+.m-ttl{font-family:var(--bk);font-size:19px;font-weight:700;color:var(--td);margin-bottom:4px}
+.m-sub{font-family:var(--hv);font-size:11px;color:var(--tmu);margin-bottom:16px;line-height:1.6}
+.m-cls{
+  position:absolute;top:14px;right:14px;width:26px;height:26px;
+  border-radius:50%;background:var(--cm2);border:none;cursor:pointer;
+  font-size:13px;color:var(--tm);display:flex;align-items:center;justify-content:center;
+}
+.m-item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd);align-items:flex-start;cursor:pointer}
+.m-thumb{width:36px;height:46px;border-radius:8px;flex-shrink:0}
+.m-thumb.rd{background:var(--cr2)}
+.m-thumb.gn{background:var(--fo)}
+.m-thumb.pu{background:#3D2A5A}
+.m-item-info strong{display:block;font-family:var(--bk);font-size:13px;color:var(--td);line-height:1.35;margin-bottom:3px;font-weight:700}
+.m-item-info small{font-family:var(--hv);font-size:10px;color:var(--tmu)}
+</style>
+
+<!-- ─────────── HTML ─────────── -->
+
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screen" id="screen">
+
+    <!-- ══ SPLASH ══ -->
+    <div class="page active" id="pg-splash" style="background:var(--cr);align-items:center;justify-content:center">
+      <div class="sp-glow"></div>
+
+      <!-- Fondo tipográfico bicapa -->
+      <div class="sp-bg-layer">
+        <div class="sp-bg-word hv w1">ÍNDICE</div>
+        <div class="sp-bg-word bk w2">índice</div>
+        <div class="sp-bg-word hv w3">LO QUE INSPIRA</div>
+      </div>
+
+      <div class="sp-logo">
+        <div class="sp-row">
+          <span class="sp-br" id="brL">[</span>
+          <span class="sp-typed" id="typed"></span>
+          <span class="sp-cur" id="cur"></span>
+          <span class="sp-br" id="brR">]</span>
+        </div>
+        <div class="sp-tag" id="spTag">Lo que inspira a quienes crean</div>
+      </div>
+      <div class="sp-bar"><div class="sp-barf" id="spBar"></div></div>
+    </div>
+
+    <!-- ══ LOGIN ══ -->
+    <div class="page" id="pg-login">
+      <!-- Bicapa tipográfica: Helvetica ultra + Baskerville italic -->
+      <div class="lg-bg-layer">
+        <div class="lg-bg-hv">LO QUE<br>LOS<br>INSPIRA</div>
+        <div class="lg-bg-bk">lo que<br>los<br>inspira</div>
+      </div>
+
+      <div class="lg-inner" id="lgInner">
+        <!-- Logo: [ ín ] en Helvetica bold + dice en Baskerville italic -->
+        <div class="lg-logo">
+          <div class="lg-logo-wrap">
+            <span class="lg-br">[</span><span class="lg-in">ín</span><span class="lg-dice">dice</span><span class="lg-br">]</span>
+          </div>
+          <div class="lg-logo-sub">Lo que inspira a quienes crean</div>
+        </div>
+
+        <div class="lg-ttl">Ingresá</div>
+        <div class="fl">
+          <label class="fl-lbl">Mail</label>
+          <input class="fl-inp" type="email" placeholder="nombre@mail.com">
+        </div>
+        <div class="fl">
+          <label class="fl-lbl">Contraseña</label>
+          <input class="fl-inp" type="password" placeholder="••••••">
+          <div class="fgt">¿Olvidaste tu contraseña?</div>
+        </div>
+        <button class="btn-lg" id="loginBtn">Ingresar</button>
+        <div class="dvd">o ingresá con</div>
+        <div class="soc">
+          <button class="btn-soc">Instagram</button>
+          <button class="btn-soc">Google</button>
+        </div>
+        <div class="lg-foot">
+          <p>¿No tenés cuenta? <a>Registrate →</a></p>
+          <p class="lg-terms">Al ingresar autorizás los <a>Términos y condiciones</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ HOME ══ -->
+    <div class="page" id="pg-home">
+      <div class="hm-scroll" id="hmScroll">
+
+        <!-- topbar -->
+        <div class="topbar">
+          <div class="tl"><span class="tlb">[</span><span class="tli">ín</span><span class="tld">dice</span><span class="tlb">]</span></div>
+          <span class="tmeta">Martes 22 · Bs As</span>
+          <div class="av">AG</div>
+        </div>
+
+        <!-- HERO -->
+        <div class="hero rv" id="heroCard">
+          <div class="hero-bnum">1</div>
+          <div class="hero-bg-letters">Literatura</div>
+          <div class="hero-tag">Selección diaria · Literatura · 8 min · Charlas</div>
+          <div class="hero-ttl">La narrativa del sur en tres voces</div>
+          <div class="hero-mt">TAP PARA COMENZAR →</div>
+        </div>
+
+        <!-- PARA ESCUCHAR -->
+        <div class="sh rv"><div class="sh-t">Para escuchar</div><span class="sh-l">Ver todo →</span></div>
+        <div class="hsc rv">
+          <div class="mc" onclick="togglePlayer()">
+            <div class="mc-bg">P</div>
+            <div class="mc-in">
+              <span class="mc-tag mc-live">● En vivo</span>
+              <div class="mc-tt">El oficio de escribir</div>
+              <div class="mc-sb">Podcast · Música</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('audio')">
+            <div class="mc-bg">A</div>
+            <div class="mc-in">
+              <span class="mc-tag">Audio-libro</span>
+              <div class="mc-tt">Kohan lee a Kohan</div>
+              <div class="mc-sb">Ep. 5</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('entre')">
+            <div class="mc-bg">E</div>
+            <div class="mc-in">
+              <span class="mc-tag">Entrevista</span>
+              <div class="mc-tt">Lucrecia Martel</div>
+              <div class="mc-sb">32 min</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLAYER EXPANDIDO -->
+        <div class="player-expanded rv" id="playerExp">
+          <div class="pe-typo-bg"><span class="t1">PODCAST</span><span class="t2">escuchar</span></div>
+          <div class="pe-inner">
+            <div class="pe-live"><div class="pe-live-dot"></div><span class="pe-live-txt">Podcast · Música · En vivo</span></div>
+            <div class="pe-tag">Hablando de profesión</div>
+            <div class="pe-ttl">El oficio de escribir</div>
+            <div class="pe-sub">Juana Molina — Episodio 5</div>
+            <div class="pe-prog"><div class="pe-pf"></div></div>
+            <div class="pe-times"><span>14:22</span><span>32:10</span></div>
+            <div class="pe-ctrl">
+              <span class="pe-skip">⏮</span>
+              <div class="pe-play" id="playBtn" onclick="togglePlay()">▐▐</div>
+              <span class="pe-skip">⏭</span>
+            </div>
+            <div class="pe-actions">
+              <button class="pe-btn act">Guardado ✓</button>
+              <button class="pe-btn">Compartir</button>
+              <button class="pe-btn">+ Info</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TUS ARTISTAS -->
+        <div class="sh rv"><div class="sh-t">Tus artistas</div><span class="sh-l">Ver todo →</span></div>
+        <div class="art-sec rv">
+
+          <!-- Juana Molina -->
+          <div class="ai" id="a1">
+            <div class="ai-hd" onclick="togArtist('a1')">
+              <span class="ai-n">1</span>
+              <div class="ai-nm"><strong>Juana Molina</strong><span>3 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="artist-profile">
+                <div class="ap-header" style="background:linear-gradient(160deg,#2a1540 0%,#8B1A4A 60%,#B5356A 100%)">
+                  <div class="ap-bg-txt">JUANA</div>
+                  <div class="ap-bg-bk">Molina</div>
+                  <div class="ap-badge">Autora · Argentina</div>
+                  <div class="ap-name">Juana<br>Molina</div>
+                  <div class="ap-origin">Música · Literatura</div>
+                  <div class="ap-stats">
+                    <div class="ap-stat"><div class="ap-stat-n">12</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div class="ap-stat"><div class="ap-stat-n">3</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act" onclick="setTab('jm','Música',this)">Música</div>
+                  <div class="ap-tab" onclick="setTab('jm','Entrevistas',this)">Entrevistas</div>
+                  <div class="ap-tab" onclick="setTab('jm','Artículos',this)">Artículos</div>
+                  <div class="ap-tab" onclick="setTab('jm','Crónicas',this)">Crónicas</div>
+                </div>
+                <div class="ap-bio">Juana Molina es una artista argentina conocida por su música experimental y su capacidad para crear paisajes sonoros únicos que mezclan folklore con electrónica.</div>
+                <div class="ap-content" id="jm-content">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div class="ap-item-info"><div class="ap-item-tag">Podcast · 32 min · 2026</div><div class="ap-item-ttl">¿Qué lee un cantante?</div><div class="ap-item-sub">Episodio reciente</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div class="ap-item-info"><div class="ap-item-tag">Artículo · 6 min</div><div class="ap-item-ttl">La música como segunda lengua</div><div class="ap-item-sub">Publicado esta semana</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div class="ap-item-info"><div class="ap-item-tag">Ensayo · 30 min</div><div class="ap-item-ttl">Las letras son un espejo al alma</div><div class="ap-item-sub">Destacado</div></div></div>
+                </div>
+                <div class="ap-novedades">3 novedades · 12 publicaciones →</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mariana Enríquez -->
+          <div class="ai" id="a2">
+            <div class="ai-hd" onclick="togArtist('a2')">
+              <span class="ai-n">2</span>
+              <div class="ai-nm"><strong>Mariana Enríquez</strong><span>4 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="artist-profile">
+                <div class="ap-header" style="background:linear-gradient(160deg,#0a1a14 0%,#2C4A2E 60%,#3D6B40 100%)">
+                  <div class="ap-bg-txt">MARIANA</div>
+                  <div class="ap-bg-bk">Enríquez</div>
+                  <div class="ap-badge">Autora · Argentina</div>
+                  <div class="ap-name">Mariana<br>Enríquez</div>
+                  <div class="ap-origin">Terror · Crónicas · Cine</div>
+                  <div class="ap-stats">
+                    <div class="ap-stat"><div class="ap-stat-n">38</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div class="ap-stat"><div class="ap-stat-n">4</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act" onclick="setTab('me','Terror',this)">Terror</div>
+                  <div class="ap-tab" onclick="setTab('me','Crónicas',this)">Crónicas</div>
+                  <div class="ap-tab" onclick="setTab('me','Cine',this)">Cine</div>
+                </div>
+                <div class="ap-bio">Escritora argentina de terror y periodismo narrativo. Sus cuentos exploran los márgenes oscuros de la sociedad argentina contemporánea.</div>
+                <div class="ap-content" id="me-content">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div class="ap-item-info"><div class="ap-item-tag">Cuento · 18 min</div><div class="ap-item-ttl">La casa de Adela</div><div class="ap-item-sub">Nuevo esta semana</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div class="ap-item-info"><div class="ap-item-tag">Crónica · 12 min</div><div class="ap-item-ttl">Los chicos que matan</div><div class="ap-item-sub">Periodismo narrativo</div></div></div>
+                </div>
+                <div class="ap-novedades">4 novedades · 38 publicaciones →</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Martín Kohan -->
+          <div class="ai" id="a3">
+            <div class="ai-hd" onclick="togArtist('a3')">
+              <span class="ai-n">3</span>
+              <div class="ai-nm"><strong>Martín Kohan</strong><span>2 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="artist-profile">
+                <div class="ap-header" style="background:linear-gradient(160deg,#0a0a1a 0%,#1A2A4A 60%,#2A3A5A 100%)">
+                  <div class="ap-bg-txt">KOHAN</div>
+                  <div class="ap-bg-bk">Martín</div>
+                  <div class="ap-badge">Autor · Argentina</div>
+                  <div class="ap-name">Martín<br>Kohan</div>
+                  <div class="ap-origin">Literatura · Ensayo</div>
+                  <div class="ap-stats">
+                    <div class="ap-stat"><div class="ap-stat-n">9</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div class="ap-stat"><div class="ap-stat-n">2</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act">Literatura</div>
+                  <div class="ap-tab">Ensayos</div>
+                </div>
+                <div class="ap-bio">Escritor y crítico literario argentino. Autor de Ciencias morales. Su escritura explora la memoria, el cuerpo y la política.</div>
+                <div class="ap-content">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div class="ap-item-info"><div class="ap-item-tag">Audio-libro · 18 min</div><div class="ap-item-ttl">Kohan lee a Kohan — Ep.5</div><div class="ap-item-sub">Nuevo episodio</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div class="ap-item-info"><div class="ap-item-tag">Ensayo · 22 min</div><div class="ap-item-ttl">Ciencias morales: una lectura</div><div class="ap-item-sub">Editorial</div></div></div>
+                </div>
+                <div class="ap-novedades">2 novedades · 9 publicaciones →</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TUS LISTAS -->
+        <div class="sh rv"><div class="sh-t">Tus listas</div><span class="sh-l">Nueva +</span></div>
+        <div class="lst-row rv">
+          <div class="lc"><div class="lc-ic">🔖</div><strong>Pendientes</strong><span>12 guardados</span></div>
+          <div class="lc"><div class="lc-ic">☆</div><strong>Favoritos</strong><span>23 guardados</span></div>
+          <div class="lc-add">+</div>
+        </div>
+
+        <!-- CONTINUAR -->
+        <div class="sh rv"><div class="sh-t">Continuar</div><span class="sh-l">Ver todo →</span></div>
+        <div class="cc rv" onclick="openM('cine')">
+          <div class="cc-th rd">LIT.</div>
+          <div class="cc-info">
+            <div class="cc-cat">Literatura</div>
+            <div class="cc-ttl">¿El cine ha muerto?</div>
+            <div class="pb"><div class="pf" style="width:90%;background:var(--cr)"></div></div>
+            <div style="font-size:9px;color:var(--tmu);margin-top:2px;font-family:var(--hv)">90% · 5 min restantes</div>
+          </div>
+          <div class="cc-ply">▶</div>
+        </div>
+        <div class="cc grn rv" onclick="openM('under')">
+          <div class="cc-th gn">MÚS.</div>
+          <div class="cc-info">
+            <div class="cc-cat">Música</div>
+            <div class="cc-ttl">El under está de moda</div>
+            <div class="pb"><div class="pf" style="width:20%;background:var(--fo)"></div></div>
+            <div style="font-size:9px;color:var(--tmu);margin-top:2px;font-family:var(--hv)">20% · 10 min restantes</div>
+          </div>
+          <div class="cc-ply">▶</div>
+        </div>
+
+        <!-- QUOTE — con juego tipográfico bicapa -->
+        <div class="qb rv">
+          <div class="qb-bg-hv">"</div>
+          <div class="qb-bg-bk">"</div>
+          <div class="qb-t">La literatura no es una mentira, sino la forma más honesta de decir la verdad. Pero hay que entender que no todos son honestos.</div>
+          <div class="qb-a">— Mariana Enríquez · Literatura</div>
+        </div>
+
+        <!-- TYPO BAND — ticker bicapa -->
+        <div class="typo-band rv">
+          <div class="typo-band-inner" id="tickerInner">
+            <span class="hv">MÚSICA</span><span class="sep">·</span>
+            <span class="bk">letras</span><span class="sep">·</span>
+            <span class="hv">CINE</span><span class="sep">·</span>
+            <span class="bk">textos</span><span class="sep">·</span>
+            <span class="hv">PODCAST</span><span class="sep">·</span>
+            <span class="bk">literatura</span><span class="sep">·</span>
+            <span class="hv">CRÓNICAS</span><span class="sep">·</span>
+            <span class="bk">ensayos</span><span class="sep">·</span>
+            <span class="hv">MÚSICA</span><span class="sep">·</span>
+            <span class="bk">letras</span><span class="sep">·</span>
+            <span class="hv">CINE</span><span class="sep">·</span>
+            <span class="bk">textos</span><span class="sep">·</span>
+            <span class="hv">PODCAST</span><span class="sep">·</span>
+            <span class="bk">literatura</span><span class="sep">·</span>
+            <span class="hv">CRÓNICAS</span><span class="sep">·</span>
+            <span class="bk">ensayos</span><span class="sep">·</span>
+          </div>
+        </div>
+
+        <!-- TU SEMANA -->
+        <div class="sh rv"><div class="sh-t">Tu semana</div></div>
+        <div class="st-row rv">
+          <div class="stc cr">
+            <div class="st-bg-n">4</div>
+            <div class="st-n">4</div>
+            <div class="st-l">textos leídos<br>esta semana</div>
+          </div>
+          <div class="stc fo">
+            <div class="st-bg-n">1h</div>
+            <div class="st-n">1h 42'</div>
+            <div class="st-l">tiempo de escucha<br>a diario</div>
+          </div>
+        </div>
+
+        <!-- ARTISTAS SUGERIDOS -->
+        <div class="sh rv"><div class="sh-t">Artistas sugeridos</div><span class="sh-l">Ver más →</span></div>
+        <div class="sg-lst rv">
+          <div class="sg-it"><div class="sg-av cr">JM</div><div class="sg-inf"><strong>Juana Molina</strong><span>Música · Literatura · 12 publ.</span></div><button class="btn-fw ing" onclick="tfw(this)">Siguiendo</button></div>
+          <div class="sg-it"><div class="sg-av fo">ME</div><div class="sg-inf"><strong>Mariana Enríquez</strong><span>Terror · Crónicas · 38 publ.</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+          <div class="sg-it"><div class="sg-av pu">DI</div><div class="sg-inf"><strong>Dillom</strong><span>Música · Cine · 28 publ.</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+          <div class="sg-it"><div class="sg-av bl">DP</div><div class="sg-inf"><strong>Diego Peretti</strong><span>Cine · Literatura · 5 publ.</span></div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div>
+        </div>
+
+        <!-- SEARCH + CATEGORÍAS -->
+        <div class="srch rv">
+          <span style="opacity:0.32;font-size:14px;font-family:var(--hv)">⌕</span>
+          <span>Autores, textos, géneros...</span>
+        </div>
+        <div class="sh rv"><div class="sh-t">Categorías</div></div>
+        <div class="cat-grid rv">
+          <div class="ccat c1" onclick="openM('lit')">
+            <div class="ccat-bl">L</div>
+            <div class="ccat-bn">1200</div>
+            <div class="ccat-t">Literatura</div>
+            <div class="ccat-c">1200 textos</div>
+          </div>
+          <div class="ccat c2" onclick="openM('ens')">
+            <div class="ccat-bl">E</div>
+            <div class="ccat-bn">138</div>
+            <div class="ccat-t">Ensayos</div>
+            <div class="ccat-c">138 textos</div>
+          </div>
+          <div class="ccat c3" onclick="openM('pod')">
+            <div class="ccat-bl">P</div>
+            <div class="ccat-bn">63</div>
+            <div class="ccat-t">Podcast</div>
+            <div class="ccat-c">63 episodios</div>
+          </div>
+          <div class="ccat c4" onclick="openM('cro')">
+            <div class="ccat-bl">C</div>
+            <div class="ccat-bn">50</div>
+            <div class="ccat-t">Crónicas</div>
+            <div class="ccat-c">50 textos</div>
+          </div>
+        </div>
+        <div style="height:20px"></div>
+
+      </div><!-- /hm-scroll -->
+
+      <div class="bnav">
+        <div class="ni act"><span class="ni-ic">⌂</span><span class="ni-lb">Inicio</span></div>
+        <div class="ni"><span class="ni-ic">🔖</span><span class="ni-lb">Guardado</span></div>
+        <div class="ni"><span class="ni-ic">▶</span><span class="ni-lb">Escuchar</span></div>
+        <div class="ni"><span class="ni-ic">◯</span><span class="ni-lb">Perfil</span></div>
+      </div>
+    </div><!-- /pg-home -->
+
+    <!-- MODAL -->
+    <div class="modal-ov" id="modal" onclick="closeBg(event)">
+      <div class="modal-sh">
+        <div class="mh"></div>
+        <button class="m-cls" onclick="closeM()">✕</button>
+        <div id="mContent"></div>
+      </div>
+    </div>
+
+  </div><!-- /screen -->
+</div><!-- /phone -->
+
+<script>
+const dl = ms => new Promise(r => setTimeout(r, ms));
+
+/* ── PAGE NAV ── */
+function showPage(p) {
+  ['splash','login','home'].forEach(x => {
+    document.getElementById('pg-' + x).classList.remove('active','slide-up');
+  });
+  const pg = document.getElementById('pg-' + p);
+  pg.classList.add('active');
+  if (p !== 'splash') { void pg.offsetWidth; pg.classList.add('slide-up'); }
+  if (p === 'login')  { setTimeout(() => { const i = document.getElementById('lgInner'); i.classList.remove('go'); void i.offsetWidth; i.classList.add('go'); }, 350); }
+  if (p === 'home')   { setTimeout(initReveal, 200); }
+  if (p === 'splash') { restartSplash(); }
+}
+
+document.getElementById('loginBtn').addEventListener('click', () => showPage('home'));
+
+/* ── SCROLL REVEAL ── */
+function initReveal() {
+  const sc = document.getElementById('hmScroll');
+  sc.querySelectorAll('.rv').forEach(el => el.classList.remove('vis'));
+  const check = () => sc.querySelectorAll('.rv').forEach(el => {
+    const r = el.getBoundingClientRect(), sr = sc.getBoundingClientRect();
+    if (r.top < sr.bottom - 10) el.classList.add('vis');
+  });
+  sc.removeEventListener('scroll', check);
+  sc.addEventListener('scroll', check, {passive:true});
+  check();
+}
+
+/* Hero parallax */
+document.getElementById('hmScroll').addEventListener('scroll', function(){
+  const s = this.scrollTop;
+  const h = document.getElementById('heroCard');
+  if (h) h.style.transform = `translateY(${s * 0.18}px) scale(${Math.max(0.97, 1 - s * 0.0002)})`;
+}, {passive:true});
+
+/* ── SPLASH typewriter ── */
+let splashRunning = false;
+function restartSplash() {
+  if (splashRunning) return;
+  document.getElementById('typed').innerHTML = '';
+  document.getElementById('cur').className = 'sp-cur';
+  document.getElementById('brL').className = 'sp-br';
+  document.getElementById('brR').className = 'sp-br';
+  document.getElementById('spTag').className = 'sp-tag';
+  const bar = document.getElementById('spBar');
+  bar.style.transition = 'none'; bar.style.width = '0';
+  setTimeout(runSplash, 80);
+}
+
+async function runSplash() {
+  splashRunning = true;
+  const typed = document.getElementById('typed');
+  const cur   = document.getElementById('cur');
+  const brL   = document.getElementById('brL');
+  const brR   = document.getElementById('brR');
+  const tag   = document.getElementById('spTag');
+  const bar   = document.getElementById('spBar');
+
+  await dl(450);
+  brL.classList.add('v'); brR.classList.add('v');
+  await dl(200);
+
+  // Escribir "índice" en Helvetica (sans)
+  const full = ['í','n','d','i','c','e'];
+  let spans = [];
+  for (let c of full) {
+    if (!document.getElementById('pg-splash').classList.contains('active')) { splashRunning=false; return; }
+    const s = document.createElement('span');
+    s.className = 'ch-s'; s.textContent = c;
+    typed.appendChild(s); spans.push(s);
+    await dl(72 + Math.random() * 38);
+  }
+  await dl(620);
+
+  // Borrar "dice" (4 chars)
+  for (let i = 0; i < 4; i++) {
+    const last = spans.pop();
+    if (last) typed.removeChild(last);
+    await dl(52 + Math.random() * 28);
+  }
+  await dl(230);
+
+  // Reescribir "dice" en Baskerville italic
+  for (let c of ['d','i','c','e']) {
+    const s = document.createElement('span');
+    s.className = 'ch-i'; s.textContent = c;
+    typed.appendChild(s); spans.push(s);
+    await dl(80 + Math.random() * 32);
+  }
+
+  await dl(320);
+  cur.classList.add('off');
+  tag.classList.add('v');
+  bar.style.transition = 'width 2.4s ease';
+  bar.style.width = '100%';
+  await dl(2700);
+  splashRunning = false;
+  showPage('login');
+}
+
+/* ── PLAYER ── */
+let playerOpen = false, playing = false;
+function togglePlayer() {
+  playerOpen = !playerOpen;
+  document.getElementById('playerExp').classList.toggle('open', playerOpen);
+}
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('playBtn').textContent = playing ? '▐▐' : '▶';
+}
+
+/* ── ARTISTAS ACORDEÓN ── */
+function togArtist(id) {
+  const isOpen = document.getElementById(id).classList.contains('open');
+  ['a1','a2','a3'].forEach(x => document.getElementById(x).classList.remove('open'));
+  if (!isOpen) document.getElementById(id).classList.add('open');
+}
+
+/* ── ARTIST TABS ── */
+const tabContent = {
+  jm: {
+    'Música':      [{c:'rd',tag:'Podcast · 32 min · 2026',ttl:'¿Qué lee un cantante?',sub:'Episodio reciente'},{c:'dk',tag:'Artículo · 6 min',ttl:'La música como segunda lengua',sub:'Esta semana'},{c:'rd',tag:'Ensayo · 30 min',ttl:'Las letras son un espejo al alma',sub:'Destacado'}],
+    'Entrevistas': [{c:'rd',tag:'Entrevista · 25 min',ttl:'Molina habla de sus influencias',sub:'2026'},{c:'dk',tag:'Charla · 18 min',ttl:'El proceso creativo en vivo',sub:'2025'}],
+    'Artículos':   [{c:'dk',tag:'Artículo · 6 min',ttl:'La música como segunda lengua',sub:'Esta semana'},{c:'rd',tag:'Artículo · 10 min',ttl:'Folklore y electrónica en tensión',sub:'2025'}],
+    'Crónicas':    [{c:'rd',tag:'Crónica · 8 min',ttl:'Una noche en el Konex',sub:'2026'}],
+  },
+  me: {
+    'Terror':   [{c:'rd',tag:'Cuento · 18 min',ttl:'La casa de Adela',sub:'Nuevo'},{c:'dk',tag:'Cuento · 22 min',ttl:'Chicos que vuelven',sub:'Destacado'}],
+    'Crónicas': [{c:'dk',tag:'Crónica · 12 min',ttl:'Los chicos que matan',sub:'Periodismo narrativo'},{c:'rd',tag:'Crónica · 9 min',ttl:'El barrio del fin del mundo',sub:'2025'}],
+    'Cine':     [{c:'rd',tag:'Ensayo · 15 min',ttl:'Terror argentino contemporáneo',sub:'Selección editorial'}],
+  },
+};
+function setTab(artist, tab, btn) {
+  const container = document.getElementById(artist + '-content');
+  if (!container) return;
+  btn.closest('.ap-tabs').querySelectorAll('.ap-tab').forEach(t => t.classList.remove('act'));
+  btn.classList.add('act');
+  const items = tabContent[artist]?.[tab];
+  if (!items) return;
+  container.innerHTML = items.map(it =>
+    `<div class="ap-item"><div class="ap-thumb ${it.c}"></div><div class="ap-item-info"><div class="ap-item-tag">${it.tag}</div><div class="ap-item-ttl">${it.ttl}</div><div class="ap-item-sub">${it.sub}</div></div></div>`
+  ).join('');
+}
+
+/* ── FOLLOW ── */
+function tfw(btn) {
+  const ing = btn.classList.contains('ing');
+  btn.classList.toggle('ing',!ing); btn.classList.toggle('seg',ing);
+  btn.textContent = ing ? 'Seguir' : 'Siguiendo';
+}
+
+/* ── MODAL ── */
+const mData = {
+  audio:  {ttl:'Kohan lee a Kohan',  sub:'Audio-libro · Martín Kohan · 6 caps',  items:[{c:'gn',ttl:'Cap.5 — Donde está el cuerpo',info:'18 min'},{c:'rd',ttl:'Cap.4 — El espejo partido',info:'22 min'},{c:'pu',ttl:'Cap.3 — Ciencias morales',info:'20 min'}]},
+  entre:  {ttl:'Lucrecia Martel',    sub:'Entrevista · Cine · 32 min',            items:[{c:'pu',ttl:'El sonido como narrativa',info:'32 min · entrevista'},{c:'rd',ttl:'La Ciénaga: 20 años después',info:'18 min · artículo'}]},
+  cine:   {ttl:'¿El cine ha muerto?',sub:'Literatura · Ensayo · 8 min restantes', items:[{c:'rd',ttl:'Lectura del artículo completo',info:'8 min restantes'},{c:'gn',ttl:'Artículos relacionados',info:'Literatura · Ensayo'}]},
+  under:  {ttl:'El under está de moda',sub:'Música · Crónica · 10 min restantes', items:[{c:'gn',ttl:'Continuar la crónica',info:'10 min restantes'},{c:'rd',ttl:'Otros artículos de la serie',info:'Música · Crónicas'}]},
+  lit:    {ttl:'Literatura',   sub:'1200 textos disponibles', items:[{c:'rd',ttl:'¿El cine ha muerto?',info:'8 min · ensayo'},{c:'gn',ttl:'La narrativa del sur',info:'12 min · charla'},{c:'pu',ttl:'Borges: el laberinto',info:'20 min · análisis'}]},
+  ens:    {ttl:'Ensayos',      sub:'138 textos · selección editorial', items:[{c:'gn',ttl:'La escritura como resistencia',info:'15 min'},{c:'rd',ttl:'Ficción y política rioplatense',info:'22 min'}]},
+  pod:    {ttl:'Podcast',      sub:'63 episodios · nuevos cada semana', items:[{c:'rd',ttl:'El oficio de escribir — Ep.5',info:'32 min · en vivo'},{c:'gn',ttl:'Kohan lee a Kohan — Ep.5',info:'18 min'},{c:'pu',ttl:'Lucrecia Martel conversa',info:'45 min'}]},
+  cro:    {ttl:'Crónicas',     sub:'50 textos · periodismo narrativo', items:[{c:'pu',ttl:'La noche del under porteño',info:'10 min'},{c:'rd',ttl:'El desierto de los libros',info:'14 min'}]},
+};
+function openM(key) {
+  const d = mData[key]; if (!d) return;
+  let h = `<div class="m-ttl">${d.ttl}</div><div class="m-sub">${d.sub}</div>`;
+  d.items.forEach(it => {
+    h += `<div class="m-item"><div class="m-thumb ${it.c}"></div><div class="m-item-info"><strong>${it.ttl}</strong><small>${it.info}</small></div></div>`;
+  });
+  document.getElementById('mContent').innerHTML = h;
+  document.getElementById('modal').classList.add('open');
+}
+function closeM() { document.getElementById('modal').classList.remove('open'); }
+function closeBg(e) { if (e.target === document.getElementById('modal')) closeM(); }
+
+/* ── INIT ── */
+runSplash();
+</script>
+</html>
