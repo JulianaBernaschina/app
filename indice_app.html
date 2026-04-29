@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[índice] App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   [índice] App — Prototipo interactivo
+   Splash · Login · Home
+════════════════════════════════════════ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+:root {
+  --cr:  #8B1A4A;
+  --cr2: #6B1238;
+  --cr3: #B5356A;
+  --cr4: rgba(139,26,74,0.1);
+  --fo:  #2C4A2E;
+  --fo2: #3D6B40;
+  --cm:  #F4F1EA;
+  --cm2: #EAE6DC;
+  --td:  #1A1208;
+  --tm:  #4A3728;
+  --tmu: #8A7A6A;
+  --bd:  #D0CAC0;
+}
+
+/* ── SHELL ── */
+body {
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.phone {
+  width: 320px;
+  height: 640px;
+  border-radius: 44px;
+  background: #0a0a0a;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 40px 100px rgba(0,0,0,0.7),
+    inset 0 0 0 1px rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.notch {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 18px; background: #0a0a0a;
+  border-radius: 0 0 12px 12px; z-index: 999;
+}
+.screen {
+  position: absolute; inset: 0;
+  border-radius: 44px; overflow: hidden;
+}
+.page {
+  position: absolute; inset: 0;
+  border-radius: 44px; overflow: hidden;
+  display: none; flex-direction: column;
+}
+.page.active { display: flex; }
+
+/* nav pills */
+.nav-pills {
+  display: flex; justify-content: center;
+  gap: 8px; padding: 16px 0 0; flex-wrap: wrap;
+}
+.nav-pill {
+  font-size: 11px; background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px; padding: 5px 14px;
+  cursor: pointer; transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-pill:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.nav-pill.act { background: #fff; color: #1a1a1a; border-color: #fff; }
+
+/* ════════════════════════════════════════
+   SPLASH
+════════════════════════════════════════ */
+#pg-splash {
+  background: #7A1040;
+  background-image:
+    radial-gradient(ellipse 180% 60% at 50% 120%, rgba(30,5,18,0.9) 0%, transparent 70%),
+    radial-gradient(ellipse 120% 80% at 80% 10%, rgba(181,53,106,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 60% at 20% 80%, rgba(107,18,56,0.5) 0%, transparent 50%);
+  align-items: center;
+  justify-content: center;
+}
+.sp-noise {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+  pointer-events: none;
+}
+.sp-ring {
+  position: absolute; width: 340px; height: 340px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.sp-ring2 {
+  position: absolute; width: 240px; height: 240px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.07);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.sp-logo { position: relative; z-index: 2; text-align: center; }
+.sp-row {
+  font-size: 52px; line-height: 1;
+  display: inline-flex; align-items: baseline;
+  letter-spacing: -0.015em; color: #fff; font-weight: 300;
+}
+.sp-br {
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  opacity: 0; transition: opacity 0.25s ease;
+  color: rgba(255,255,255,0.75);
+}
+.sp-br.v { opacity: 1; }
+.sp-typed { display: inline-flex; align-items: baseline; gap: 0; }
+.sp-cur {
+  display: inline-block; width: 2.5px; height: 0.68em;
+  background: rgba(255,255,255,0.7); margin-left: 0;
+  vertical-align: middle; border-radius: 1px;
+  animation: bl 0.55s step-end infinite;
+}
+.sp-cur.off { display: none; }
+@keyframes bl { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* sans light = DM Sans 300 */
+.ch-s  { font-family: 'DM Sans', sans-serif; font-weight: 300; color: #fff; display: inline-block; letter-spacing: -0.01em; }
+/* bold sans para "ín" */
+.ch-sb { font-family: 'DM Sans', sans-serif; font-weight: 500; color: #fff; display: inline-block; }
+/* serif italic para "dice" */
+.ch-i  { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; color: rgba(255,255,255,0.95); display: inline-block; }
+
+.sp-tag {
+  margin-top: 10px;
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 11.5px; color: rgba(255,255,255,0);
+  letter-spacing: 0.03em; transition: color 1s ease;
+}
+.sp-tag.v { color: rgba(255,255,255,0.48); }
+.sp-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1.5px; background: rgba(255,255,255,0.07);
+}
+.sp-barf { height: 100%; width: 0; background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.45)); }
+
+/* ════════════════════════════════════════
+   LOGIN
+════════════════════════════════════════ */
+#pg-login { background: var(--cm); }
+
+.lg-bg-txt {
+  position: absolute;
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: 108px; line-height: 0.88;
+  color: rgba(139,26,74,0.055);
+  pointer-events: none; z-index: 0;
+  bottom: -10px; right: -12px;
+  text-align: right; letter-spacing: -0.03em;
+}
+.lg-inner {
+  position: relative; z-index: 1;
+  padding: 52px 24px 24px;
+  flex: 1; display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.lg-inner::-webkit-scrollbar { display: none; }
+.lg-logo { margin-bottom: 32px; }
+.lg-logo-txt {
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400;
+  color: var(--fo); letter-spacing: -0.02em;
+}
+.lg-logo-txt .lb  { font-family: 'DM Sans', sans-serif; font-weight: 300; color: var(--fo); }
+.lg-logo-txt .lin { font-weight: 900; }
+.lg-logo-txt .ld  { font-style: italic; }
+.lg-logo-sub {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 11px; color: var(--tmu); margin-top: 4px;
+}
+.lg-ttl {
+  font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--cr); margin-bottom: 24px;
+}
+.fl { margin-bottom: 22px; }
+.fl-lbl {
+  font-size: 8.5px; font-weight: 500; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--tm); margin-bottom: 8px; display: block;
+}
+.fl-inp {
+  width: 100%; border: none; border-bottom: 1.5px solid var(--bd);
+  background: transparent; padding: 9px 0;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--td);
+  outline: none; transition: border-color 0.2s;
+}
+.fl-inp:focus { border-bottom-color: var(--cr); }
+.fl-inp::placeholder { color: var(--tmu); font-size: 12px; }
+.fgt {
+  text-align: right; margin-top: 6px; font-size: 10px;
+  color: var(--cr); cursor: pointer;
+  font-style: italic; font-family: 'Playfair Display', serif;
+}
+.btn-lg {
+  width: 100%; padding: 14px; background: var(--cr); color: #fff;
+  border: none; border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; margin-top: 8px; letter-spacing: 0.03em;
+  transition: transform 0.12s; box-shadow: 0 6px 22px rgba(139,26,74,0.3);
+}
+.btn-lg:active { transform: scale(0.97); }
+.dvd {
+  display: flex; align-items: center; gap: 10px;
+  margin: 18px 0; color: var(--tmu); font-size: 10px;
+}
+.dvd::before, .dvd::after { content: ''; flex: 1; height: 1px; background: var(--bd); }
+.soc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-soc {
+  padding: 11px 8px; border: 1.5px solid var(--bd); background: #fff;
+  border-radius: 50px; font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px; font-weight: 500; color: var(--tm);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 7px; transition: border-color 0.2s;
+}
+.btn-soc:hover { border-color: var(--cr); }
+.soc-icon { width: 15px; height: 15px; flex-shrink: 0; }
+.lg-foot { margin-top: auto; padding-top: 16px; text-align: center; }
+.lg-foot p { font-size: 11px; color: var(--tmu); }
+.lg-foot a { color: var(--cr); font-weight: 500; cursor: pointer; }
+.lg-terms { font-size: 9px; color: var(--tmu); text-align: center; margin-top: 8px; line-height: 1.6; }
+
+/* login element stagger */
+.lg-inner > * { opacity: 0; transform: translateY(16px); }
+.lg-inner.go > * { animation: stg 0.5s cubic-bezier(0.22,1,0.36,1) forwards; }
+.lg-inner.go > *:nth-child(1) { animation-delay: .04s; }
+.lg-inner.go > *:nth-child(2) { animation-delay: .11s; }
+.lg-inner.go > *:nth-child(3) { animation-delay: .18s; }
+.lg-inner.go > *:nth-child(4) { animation-delay: .25s; }
+.lg-inner.go > *:nth-child(5) { animation-delay: .32s; }
+.lg-inner.go > *:nth-child(6) { animation-delay: .39s; }
+.lg-inner.go > *:nth-child(7) { animation-delay: .46s; }
+.lg-inner.go > *:nth-child(8) { animation-delay: .53s; }
+@keyframes stg { to { opacity: 1; transform: translateY(0); } }
+
+/* page transitions */
+.from-right  { animation: fromRight  0.6s  cubic-bezier(0.22,1,0.36,1) both; }
+.from-bottom { animation: fromBottom 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes fromRight  { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes fromBottom { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* ════════════════════════════════════════
+   HOME
+════════════════════════════════════════ */
+#pg-home { background: var(--cm); }
+.hm-scroll { flex: 1; overflow-y: auto; padding-bottom: 64px; }
+.hm-scroll::-webkit-scrollbar { display: none; }
+
+/* topbar */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(244,241,234,0.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(208,202,192,0.4);
+  padding: 36px 16px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tl { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 400; color: var(--fo); }
+.tl .tlb { font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.tl .tli { font-weight: 900; }
+.tl .tld { font-style: italic; }
+.tmeta {
+  font-size: 8.5px; color: var(--tmu);
+  position: absolute; left: 50%; transform: translateX(-50%);
+  letter-spacing: 0.05em;
+}
+.av {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--fo); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+}
+
+/* hero */
+.hero {
+  margin: 12px 12px 0; border-radius: 16px; background: var(--fo);
+  padding: 20px 18px; position: relative; overflow: hidden;
+  cursor: pointer; transition: transform 0.2s;
+  box-shadow: 0 8px 30px rgba(44,74,46,0.22);
+}
+.hero:active { transform: scale(0.98); }
+.hero-glow {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(61,107,64,0.3), transparent 55%);
+  pointer-events: none;
+}
+.hero-bnum {
+  position: absolute; right: -8px; top: -20px;
+  font-family: 'Playfair Display', serif; font-size: 140px; font-weight: 900;
+  color: rgba(255,255,255,0.05); line-height: 1; pointer-events: none;
+}
+.hero-tag { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 10px; }
+.hero-ttl { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 10px; }
+.hero-mt { font-size: 10px; color: rgba(255,255,255,0.38); }
+
+/* section header */
+.sh { padding: 20px 16px 8px; display: flex; align-items: baseline; justify-content: space-between; }
+.sh-t { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--td); }
+.sh-l { font-size: 10px; color: var(--cr); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+/* horizontal scroll cards */
+.hsc { padding: 0 14px; display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.hsc::-webkit-scrollbar { display: none; }
+.mc {
+  flex: 0 0 108px; border-radius: 14px; overflow: hidden;
+  position: relative; cursor: pointer; height: 130px; transition: transform 0.2s;
+}
+.mc:nth-child(1) { background: linear-gradient(150deg, #3d0a22, #8B1A4A); }
+.mc:nth-child(2) { background: linear-gradient(150deg, #0e2410, #2C4A2E); }
+.mc:nth-child(3) { background: linear-gradient(150deg, #1a1030, #3D2A5A); }
+.mc:active { transform: scale(0.93); }
+.mc-bg-l {
+  position: absolute; inset: 0;
+  font-family: 'Playfair Display', serif; font-size: 60px; font-weight: 900;
+  color: rgba(255,255,255,0.06); display: flex; align-items: flex-end;
+  padding: 5px; line-height: 1; pointer-events: none;
+}
+.mc-in {
+  position: relative; z-index: 1; padding: 10px;
+  height: 100%; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.mc-tag {
+  font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38); margin-bottom: 3px; font-family: 'DM Sans', sans-serif;
+}
+.mc-live-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--cr); border-radius: 3px; padding: 2px 5px;
+  margin-bottom: 4px; width: fit-content;
+}
+.mc-live-dot {
+  width: 4px; height: 4px; border-radius: 50%; background: #fff;
+  animation: ld 1.1s ease-in-out infinite;
+}
+@keyframes ld { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.mc-live-txt { font-size: 6.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; font-family: 'DM Sans', sans-serif; }
+.mc-tt { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: #fff; line-height: 1.3; }
+.mc-sb { font-size: 9px; color: rgba(255,255,255,0.38); margin-top: 2px; font-family: 'DM Sans', sans-serif; }
+
+/* player expandido */
+.player-exp {
+  margin: 6px 12px 0; border-radius: 16px; overflow: hidden;
+  background: linear-gradient(160deg, #180910 0%, #3a1228 100%);
+  max-height: 0;
+  transition: max-height 0.52s cubic-bezier(0.4,0,0.2,1), opacity 0.38s;
+  opacity: 0; pointer-events: none;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.player-exp.open { max-height: 240px; opacity: 1; pointer-events: auto; }
+.pe-in { padding: 16px 16px 14px; }
+.pe-live-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.pe-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #E05577; animation: ld 1.2s ease-in-out infinite; flex-shrink: 0; }
+.pe-live-txt { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); font-family: 'DM Sans', sans-serif; }
+.pe-tag { font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 4px; font-family: 'DM Sans', sans-serif; }
+.pe-ttl { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 2px; }
+.pe-sub { font-size: 10px; color: rgba(255,255,255,0.38); margin-bottom: 12px; font-family: 'DM Sans', sans-serif; }
+.pe-prog { height: 1.5px; background: rgba(255,255,255,0.13); border-radius: 2px; margin-bottom: 5px; }
+.pe-pf { height: 100%; width: 45%; background: linear-gradient(90deg, var(--cr3), #E05577); border-radius: 2px; }
+.pe-times { display: flex; justify-content: space-between; font-size: 8.5px; color: rgba(255,255,255,0.3); margin-bottom: 14px; font-family: 'DM Sans', sans-serif; }
+.pe-ctrl { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.pe-play {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: 1px solid rgba(255,255,255,0.18);
+  font-size: 12px; color: #fff; transition: background 0.2s;
+}
+.pe-skip { font-size: 14px; color: rgba(255,255,255,0.38); cursor: pointer; }
+.pe-acts { display: flex; gap: 7px; margin-top: 12px; justify-content: center; }
+.pe-btn {
+  font-size: 9px; padding: 4px 11px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.5); cursor: pointer;
+  background: transparent; font-family: 'DM Sans', sans-serif;
+}
+.pe-btn.on { background: rgba(139,26,74,0.6); border-color: var(--cr); color: #fff; }
+
+/* artistas — acordeones */
+.art-sec { padding: 0 14px; }
+.ai { border-bottom: 1px solid var(--bd); overflow: hidden; }
+.ai-hd { display: flex; align-items: center; padding: 13px 0; cursor: pointer; gap: 10px; }
+.ai-n {
+  font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900;
+  color: rgba(139,26,74,0.2);
+  width: 26px; flex-shrink: 0; line-height: 1;
+  transition: color 0.3s;
+}
+.ai.open .ai-n { color: rgba(139,26,74,0.5); }
+.ai-nm { flex: 1; }
+.ai-nm strong { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--td); }
+.ai-nm span   { font-size: 10px; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+.ai-cv { font-size: 10px; color: var(--tmu); transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1); }
+.ai.open .ai-cv { transform: rotate(180deg); }
+.ai-body {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.48s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+}
+.ai.open .ai-body { max-height: 420px; opacity: 1; }
+
+/* perfil de artista */
+.ap { background: var(--cm2); border-radius: 14px; overflow: hidden; margin-bottom: 14px; }
+.ap-hdr { padding: 18px 14px 14px; position: relative; overflow: hidden; }
+.ap-hdr-bg {
+  position: absolute; right: -12px; bottom: -24px;
+  font-family: 'Playfair Display', serif; font-size: 76px; font-weight: 900;
+  color: rgba(255,255,255,0.07); line-height: 1; pointer-events: none; text-align: right;
+}
+.ap-badge { font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.42); margin-bottom: 6px; font-family: 'DM Sans', sans-serif; }
+.ap-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 3px; }
+.ap-origin { font-size: 9px; color: rgba(255,255,255,0.38); font-family: 'DM Sans', sans-serif; }
+.ap-stats { display: flex; gap: 16px; margin-top: 12px; }
+.ap-stat-n { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #fff; line-height: 1; }
+.ap-stat-l { font-size: 8px; color: rgba(255,255,255,0.38); margin-top: 1px; font-family: 'DM Sans', sans-serif; line-height: 1.4; }
+.ap-tabs { display: flex; background: #fff; border-bottom: 1px solid var(--bd); overflow-x: auto; }
+.ap-tabs::-webkit-scrollbar { display: none; }
+.ap-tab {
+  flex-shrink: 0; text-align: center; padding: 9px 10px;
+  font-size: 8.5px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--tmu); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+.ap-tab.act { color: var(--cr); border-bottom-color: var(--cr); }
+.ap-bio { padding: 12px 12px 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--tm); line-height: 1.65; }
+.ap-cnt { padding: 0 10px 6px; }
+.ap-item { display: flex; gap: 10px; padding: 9px 2px; border-bottom: 1px solid var(--bd); align-items: flex-start; cursor: pointer; }
+.ap-item:last-child { border-bottom: none; }
+.ap-thumb { width: 32px; height: 42px; border-radius: 6px; flex-shrink: 0; }
+.ap-thumb.rd { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
+.ap-thumb.dk { background: linear-gradient(145deg, #1A1208, #2C1A10); }
+.ap-item-tag { font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cr); margin-bottom: 2px; font-family: 'DM Sans', sans-serif; }
+.ap-item-ttl { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: var(--td); line-height: 1.3; }
+.ap-item-sub { font-size: 9px; color: var(--tmu); margin-top: 1px; font-family: 'DM Sans', sans-serif; }
+.ap-more { font-size: 10px; color: var(--cr); font-family: 'Playfair Display', serif; font-style: italic; text-align: right; padding: 8px 12px 10px; display: block; }
+
+/* tus listas */
+.lst-wrap { padding: 0 14px; display: flex; flex-direction: column; gap: 8px; }
+.lst-card {
+  background: #fff; border-radius: 12px;
+  border-left: 3px solid var(--cr);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: transform 0.18s;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+.lst-card.fo { border-left-color: var(--fo); }
+.lst-card:active { transform: scale(0.97); }
+.lst-ic { font-size: 18px; opacity: 0.55; flex-shrink: 0; }
+.lst-info { flex: 1; }
+.lst-info strong { display: block; font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--td); }
+.lst-info span   { font-size: 10px; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+.lst-count { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: rgba(139,26,74,0.12); line-height: 1; }
+.lst-card.fo .lst-count { color: rgba(44,74,46,0.12); }
+.lst-new {
+  margin: 0 14px; border-radius: 12px;
+  border: 1.5px dashed var(--bd);
+  padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; color: var(--tmu);
+}
+.lst-new span { font-family: 'DM Sans', sans-serif; font-size: 11px; }
+
+/* continuar */
+.cc {
+  margin: 0 12px 8px; border-radius: 14px; background: #fff;
+  border: 1px solid var(--bd); padding: 12px 13px;
+  display: flex; align-items: center; gap: 11px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: transform 0.18s; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.cc:active { transform: scale(0.98); }
+.cc::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cr); }
+.cc.grn::before { background: var(--fo); }
+.cc-th {
+  width: 36px; height: 46px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif; font-size: 7px;
+  color: rgba(255,255,255,0.5); text-align: center; padding: 3px; line-height: 1.3;
+}
+.cc-th.rd { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
+.cc-th.gn { background: linear-gradient(145deg, var(--fo), var(--fo2)); }
+.cc-info { flex: 1; min-width: 0; }
+.cc-cat { font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tmu); margin-bottom: 2px; font-family: 'DM Sans', sans-serif; }
+.cc-ttl { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--td); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pb-track { margin-top: 4px; height: 2px; background: var(--cm2); border-radius: 2px; overflow: hidden; }
+.pb-fill  { height: 100%; border-radius: 2px; }
+.cc-ply   { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--bd); display: flex; align-items: center; justify-content: center; color: var(--tm); font-size: 10px; flex-shrink: 0; }
+
+/* quote */
+.qb {
+  margin: 16px 12px; border-radius: 16px; background: var(--cr);
+  position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(139,26,74,0.28);
+}
+.qb-inner { padding: 24px 20px 18px; position: relative; z-index: 1; }
+.qb-mark  { font-family: 'Playfair Display', serif; font-size: 80px; font-weight: 900; color: rgba(255,255,255,0.1); line-height: 0.7; display: block; margin-bottom: 4px; }
+.qb-t     { font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: #fff; line-height: 1.75; }
+.qb-author-row  { margin-top: 16px; display: flex; align-items: center; gap: 10px; }
+.qb-author-av   { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.qb-author-name { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.9); }
+.qb-author-cat  { font-size: 9px; color: rgba(255,255,255,0.42); font-family: 'DM Sans', sans-serif; }
+.qb-bg-word { position: absolute; bottom: -20px; right: -10px; font-family: 'Playfair Display', serif; font-size: 100px; font-weight: 900; color: rgba(255,255,255,0.04); line-height: 1; pointer-events: none; }
+
+/* typo band */
+.typo-band { padding: 10px 0; overflow: hidden; height: 34px; display: flex; align-items: center; }
+.typo-band-txt {
+  font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900;
+  color: rgba(0,0,0,0.055); white-space: nowrap;
+  animation: scrolltxt 22s linear infinite; display: inline-block; letter-spacing: 0.04em;
+}
+@keyframes scrolltxt { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* stats */
+.st-row { padding: 0 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stc { border-radius: 14px; padding: 16px; text-align: center; position: relative; overflow: hidden; }
+.stc.cr { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
+.stc.fo { background: linear-gradient(145deg, var(--fo), var(--fo2)); }
+.stc-bg { position: absolute; right: -8px; bottom: -8px; font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: rgba(255,255,255,0.06); line-height: 1; pointer-events: none; }
+.st-n { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: #fff; line-height: 1; position: relative; z-index: 1; }
+.st-l { font-size: 9px; color: rgba(255,255,255,0.48); margin-top: 5px; line-height: 1.45; font-family: 'DM Sans', sans-serif; position: relative; z-index: 1; }
+
+/* artistas sugeridos */
+.sg-lst { padding: 0 14px; }
+.sg-it {
+  display: flex; align-items: center; gap: 0;
+  padding: 0; margin-bottom: 8px;
+  background: #fff; border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--bd);
+  cursor: pointer; transition: transform 0.18s;
+}
+.sg-it:active { transform: scale(0.98); }
+.sg-side { width: 4px; flex-shrink: 0; align-self: stretch; }
+.sg-side.cr { background: var(--cr); }
+.sg-side.fo { background: var(--fo); }
+.sg-side.pu { background: #3D2A5A; }
+.sg-side.bl { background: #1A3A4A; }
+.sg-body { flex: 1; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+.sg-av {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: #fff;
+}
+.sg-av.cr { background: linear-gradient(135deg, var(--cr2), var(--cr)); }
+.sg-av.fo { background: linear-gradient(135deg, var(--fo), var(--fo2)); }
+.sg-av.pu { background: linear-gradient(135deg, #3D2A5A, #5A3A6B); }
+.sg-av.bl { background: linear-gradient(135deg, #1A3A4A, #2A4A5A); }
+.sg-inf { flex: 1; }
+.sg-inf strong { display: block; font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--td); line-height: 1.2; }
+.sg-inf span   { font-size: 9px; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+.sg-publ { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: rgba(0,0,0,0.06); line-height: 1; flex-shrink: 0; }
+.btn-fw {
+  font-size: 8.5px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 20px; cursor: pointer;
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
+}
+.btn-fw.ing { background: var(--cr); color: #fff; border: 1.5px solid var(--cr); }
+.btn-fw.seg { background: transparent; color: var(--cr); border: 1.5px solid var(--cr); }
+
+/* categorías */
+.cat-grid { padding: 0 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ccat {
+  border-radius: 14px; padding: 14px 12px; overflow: hidden;
+  position: relative; cursor: pointer; min-height: 68px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  transition: transform 0.18s;
+}
+.ccat:active { transform: scale(0.95); }
+.ccat.c1 { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
+.ccat.c2 { background: linear-gradient(145deg, #2C4A2E, #3D6B40); }
+.ccat.c3 { background: linear-gradient(145deg, #1A3A4A, #2A4A5A); }
+.ccat.c4 { background: linear-gradient(145deg, #3A2A1A, #5A3A2A); }
+.ccat-bn { position: absolute; right: -5px; bottom: -10px; font-family: 'Playfair Display', serif; font-size: 50px; font-weight: 900; color: rgba(255,255,255,0.1); line-height: 1; }
+.ccat-t { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: #fff; position: relative; z-index: 1; }
+.ccat-c { font-size: 9px; color: rgba(255,255,255,0.42); position: relative; z-index: 1; margin-top: 1px; font-family: 'DM Sans', sans-serif; }
+
+/* search */
+.srch {
+  margin: 20px 12px 6px; background: #fff; border: 1.5px solid var(--bd);
+  border-radius: 50px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.srch-ic { font-size: 13px; opacity: 0.32; color: var(--td); }
+.srch span { font-size: 11px; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+
+/* bottom nav */
+.bnav {
+  background: rgba(244,241,234,0.92);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(208,202,192,0.4);
+  display: flex; padding: 8px 0 14px; flex-shrink: 0;
+}
+.ni { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.ni-ic { font-size: 16px; opacity: 0.25; color: var(--td); }
+.ni.act .ni-ic { opacity: 1; color: var(--cr); }
+.ni-home-fill {
+  width: 18px; height: 18px; flex-shrink: 0; background: rgba(26,18,8,0.25);
+  clip-path: polygon(50% 0%, 0% 55%, 15% 55%, 15% 100%, 40% 100%, 40% 70%, 60% 70%, 60% 100%, 85% 100%, 85% 55%, 100% 55%);
+}
+.ni.act .ni-home-fill { background: var(--cr); }
+.ni-lb { font-size: 7px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+.ni.act .ni-lb { color: var(--cr); }
+
+/* scroll reveal */
+.rv { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+.rv.vis { opacity: 1; transform: translateY(0); }
+
+/* modal bottom sheet */
+.modal-ov {
+  position: absolute; inset: 0; border-radius: 44px; overflow: hidden;
+  background: rgba(0,0,0,0); z-index: 200;
+  display: flex; align-items: flex-end;
+  pointer-events: none; transition: background 0.32s;
+}
+.modal-ov.open { background: rgba(0,0,0,0.5); pointer-events: auto; }
+.modal-sh {
+  width: 100%; background: var(--cm); border-radius: 22px 22px 0 0;
+  padding: 16px 18px 36px; transform: translateY(100%);
+  transition: transform 0.42s cubic-bezier(0.22,1,0.36,1);
+  max-height: 74%; overflow-y: auto; position: relative;
+}
+.modal-sh::-webkit-scrollbar { display: none; }
+.modal-ov.open .modal-sh { transform: translateY(0); }
+.mh { width: 28px; height: 3px; background: var(--bd); border-radius: 2px; margin: 0 auto 16px; }
+.m-ttl { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--td); margin-bottom: 4px; }
+.m-sub { font-size: 11px; color: var(--tmu); margin-bottom: 16px; line-height: 1.6; font-family: 'DM Sans', sans-serif; }
+.m-cls { position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--cm2); border: none; cursor: pointer; font-size: 12px; color: var(--tm); display: flex; align-items: center; justify-content: center; }
+.m-item { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--bd); align-items: flex-start; cursor: pointer; }
+.m-item:last-child { border-bottom: none; }
+.m-thumb { width: 34px; height: 44px; border-radius: 8px; flex-shrink: 0; }
+.m-thumb.rd { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
+.m-thumb.gn { background: linear-gradient(145deg, var(--fo), var(--fo2)); }
+.m-thumb.pu { background: linear-gradient(145deg, #3D2A5A, #5A3A6B); }
+.m-item-ttl { display: block; font-family: 'Playfair Display', serif; font-size: 13px; color: var(--td); line-height: 1.35; margin-bottom: 3px; font-weight: 700; }
+.m-item-sub { font-size: 10px; color: var(--tmu); font-family: 'DM Sans', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screen" id="screen">
+
+    <!-- ══════════ SPLASH ══════════ -->
+    <div class="page active" id="pg-splash" style="align-items:center;justify-content:center">
+      <div class="sp-noise"></div>
+      <div class="sp-ring"></div>
+      <div class="sp-ring2"></div>
+      <div class="sp-logo">
+        <div class="sp-row">
+          <span class="sp-br" id="brL">[</span>
+          <span class="sp-typed" id="typed"></span>
+          <span class="sp-cur"   id="cur"></span>
+          <span class="sp-br"   id="brR">]</span>
+        </div>
+        <div class="sp-tag" id="spTag">Lo que inspira a quienes crean</div>
+      </div>
+      <div class="sp-bar"><div class="sp-barf" id="spBar"></div></div>
+    </div>
+
+    <!-- ══════════ LOGIN ══════════ -->
+    <div class="page" id="pg-login">
+      <div class="lg-bg-txt">lo<br>que<br>los<br>inspira</div>
+      <div class="lg-inner" id="lgInner">
+
+        <div class="lg-logo">
+          <div class="lg-logo-txt">
+            <span class="lb">[</span><span class="lin">ín</span><span class="ld">dice</span><span class="lb">]</span>
+          </div>
+          <div class="lg-logo-sub">Lo que inspira a quienes crean</div>
+        </div>
+
+        <div class="lg-ttl">Ingresá</div>
+
+        <div class="fl">
+          <label class="fl-lbl">Mail</label>
+          <input class="fl-inp" type="email" placeholder="nombre@mail.com">
+        </div>
+
+        <div class="fl">
+          <label class="fl-lbl">Contraseña</label>
+          <input class="fl-inp" type="password" placeholder="••••••">
+          <div class="fgt">¿Olvidaste tu contraseña?</div>
+        </div>
+
+        <button class="btn-lg" id="loginBtn">Ingresar</button>
+
+        <div class="dvd">o ingresá con</div>
+
+        <div class="soc">
+          <button class="btn-soc">
+            <svg class="soc-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig)" stroke-width="1.8"/>
+              <circle cx="12" cy="12" r="4.5" stroke="url(#ig)" stroke-width="1.8"/>
+              <circle cx="17.2" cy="6.8" r="1" fill="#C13584"/>
+              <defs>
+                <linearGradient id="ig" x1="2" y1="22" x2="22" y2="2">
+                  <stop offset="0%"   stop-color="#FD5949"/>
+                  <stop offset="50%"  stop-color="#C13584"/>
+                  <stop offset="100%" stop-color="#833AB4"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            Instagram
+          </button>
+          <button class="btn-soc">
+            <svg class="soc-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Google
+          </button>
+        </div>
+
+        <div class="lg-foot">
+          <p>¿No tenés cuenta? <a>Registrate →</a></p>
+          <p class="lg-terms">Al ingresar autorizás los <a>Términos y condiciones</a></p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ HOME ══════════ -->
+    <div class="page" id="pg-home">
+      <div class="hm-scroll" id="hmScroll">
+
+        <!-- topbar -->
+        <div class="topbar">
+          <div class="tl"><span class="tlb">[</span><span class="tli">ín</span><span class="tld">dice</span><span class="tlb">]</span></div>
+          <span class="tmeta">Martes 22 · Bs As</span>
+          <div class="av">AG</div>
+        </div>
+
+        <!-- hero -->
+        <div class="hero rv">
+          <div class="hero-glow"></div>
+          <div class="hero-bnum">1</div>
+          <div class="hero-tag">Selección diaria · Literatura · 8 min · Charlas</div>
+          <div class="hero-ttl">La narrativa del sur en tres voces</div>
+          <div class="hero-mt">Tap para comenzar →</div>
+        </div>
+
+        <!-- para escuchar -->
+        <div class="sh rv"><div class="sh-t">Para escuchar</div><span class="sh-l">Ver todo →</span></div>
+        <div class="hsc rv">
+          <div class="mc" onclick="togglePlayer()">
+            <div class="mc-bg-l">P</div>
+            <div class="mc-in">
+              <div class="mc-live-badge"><div class="mc-live-dot"></div><span class="mc-live-txt">En vivo</span></div>
+              <div class="mc-tt">El oficio de escribir</div>
+              <div class="mc-sb">Podcast · Música</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('audio')">
+            <div class="mc-bg-l">A</div>
+            <div class="mc-in">
+              <span class="mc-tag">Audio-libro</span>
+              <div class="mc-tt">Kohan lee a Kohan</div>
+              <div class="mc-sb">Ep. 5</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('entre')">
+            <div class="mc-bg-l">E</div>
+            <div class="mc-in">
+              <span class="mc-tag">Entrevista</span>
+              <div class="mc-tt">Lucrecia Martel</div>
+              <div class="mc-sb">32 min</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- player expandido -->
+        <div class="player-exp rv" id="playerExp">
+          <div class="pe-in">
+            <div class="pe-live-row"><div class="pe-live-dot"></div><span class="pe-live-txt">Podcast · Música · En vivo</span></div>
+            <div class="pe-tag">Hablando de profesión</div>
+            <div class="pe-ttl">El oficio de escribir</div>
+            <div class="pe-sub">Juana Molina — Episodio 5</div>
+            <div class="pe-prog"><div class="pe-pf"></div></div>
+            <div class="pe-times"><span>14:22</span><span>32:10</span></div>
+            <div class="pe-ctrl">
+              <span class="pe-skip">⏮</span>
+              <div class="pe-play" id="playBtn" onclick="togglePlay()">▐▐</div>
+              <span class="pe-skip">⏭</span>
+            </div>
+            <div class="pe-acts">
+              <button class="pe-btn on">Guardado ✓</button>
+              <button class="pe-btn">Compartir</button>
+              <button class="pe-btn">+ Info</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- tus artistas -->
+        <div class="sh rv"><div class="sh-t">Tus artistas</div><span class="sh-l">Ver todo →</span></div>
+        <div class="art-sec rv">
+
+          <!-- Juana Molina -->
+          <div class="ai" id="a1">
+            <div class="ai-hd" onclick="togA('a1')">
+              <span class="ai-n">1</span>
+              <div class="ai-nm"><strong>Juana Molina</strong><span>3 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="ap">
+                <div class="ap-hdr" style="background:linear-gradient(155deg,#2a1040 0%,#8B1A4A 55%,#B5356A 100%)">
+                  <div class="ap-hdr-bg">Juana<br>Molina</div>
+                  <div class="ap-badge">Autora · Argentina</div>
+                  <div class="ap-name">Juana<br>Molina</div>
+                  <div class="ap-origin">Música · Literatura</div>
+                  <div class="ap-stats">
+                    <div><div class="ap-stat-n">12</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div><div class="ap-stat-n">3</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act" onclick="setTab('jm','Música',this)">Música</div>
+                  <div class="ap-tab" onclick="setTab('jm','Entrevistas',this)">Entrevistas</div>
+                  <div class="ap-tab" onclick="setTab('jm','Artículos',this)">Artículos</div>
+                  <div class="ap-tab" onclick="setTab('jm','Crónicas',this)">Crónicas</div>
+                </div>
+                <div class="ap-bio">Juana Molina es una artista argentina conocida por su música experimental y su capacidad para crear paisajes sonoros únicos que mezclan folklore con electrónica.</div>
+                <div class="ap-cnt" id="jm-content">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div><div class="ap-item-tag">Podcast · 32 min · 2026</div><div class="ap-item-ttl">¿Qué lee un cantante?</div><div class="ap-item-sub">Episodio reciente</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div><div class="ap-item-tag">Artículo · 6 min</div><div class="ap-item-ttl">La música como segunda lengua</div><div class="ap-item-sub">Esta semana</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div><div class="ap-item-tag">Ensayo · 30 min</div><div class="ap-item-ttl">Las letras son un espejo al alma</div><div class="ap-item-sub">Destacado</div></div></div>
+                </div>
+                <span class="ap-more">3 novedades · 12 publicaciones →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mariana Enríquez -->
+          <div class="ai" id="a2">
+            <div class="ai-hd" onclick="togA('a2')">
+              <span class="ai-n">2</span>
+              <div class="ai-nm"><strong>Mariana Enríquez</strong><span>4 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="ap">
+                <div class="ap-hdr" style="background:linear-gradient(155deg,#0a1a14 0%,#2C4A2E 55%,#3D6B40 100%)">
+                  <div class="ap-hdr-bg">Mariana<br>Enríquez</div>
+                  <div class="ap-badge">Autora · Argentina</div>
+                  <div class="ap-name">Mariana<br>Enríquez</div>
+                  <div class="ap-origin">Terror · Crónicas · Cine</div>
+                  <div class="ap-stats">
+                    <div><div class="ap-stat-n">38</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div><div class="ap-stat-n">4</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act" onclick="setTab('me','Terror',this)">Terror</div>
+                  <div class="ap-tab" onclick="setTab('me','Crónicas',this)">Crónicas</div>
+                  <div class="ap-tab" onclick="setTab('me','Cine',this)">Cine</div>
+                </div>
+                <div class="ap-bio">Escritora argentina de terror y periodismo narrativo. Sus cuentos exploran los márgenes oscuros de la sociedad argentina contemporánea.</div>
+                <div class="ap-cnt" id="me-content">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div><div class="ap-item-tag">Cuento · 18 min</div><div class="ap-item-ttl">La casa de Adela</div><div class="ap-item-sub">Nuevo esta semana</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div><div class="ap-item-tag">Crónica · 12 min</div><div class="ap-item-ttl">Los chicos que matan</div><div class="ap-item-sub">Periodismo narrativo</div></div></div>
+                </div>
+                <span class="ap-more">4 novedades · 38 publicaciones →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Martín Kohan -->
+          <div class="ai" id="a3">
+            <div class="ai-hd" onclick="togA('a3')">
+              <span class="ai-n">3</span>
+              <div class="ai-nm"><strong>Martín Kohan</strong><span>2 novedades</span></div>
+              <span class="ai-cv">▾</span>
+            </div>
+            <div class="ai-body">
+              <div class="ap">
+                <div class="ap-hdr" style="background:linear-gradient(155deg,#080812 0%,#1A2A4A 55%,#2A3A5A 100%)">
+                  <div class="ap-hdr-bg">Martín<br>Kohan</div>
+                  <div class="ap-badge">Autor · Argentina</div>
+                  <div class="ap-name">Martín<br>Kohan</div>
+                  <div class="ap-origin">Literatura · Ensayo</div>
+                  <div class="ap-stats">
+                    <div><div class="ap-stat-n">9</div><div class="ap-stat-l">obras en<br>la app</div></div>
+                    <div><div class="ap-stat-n">2</div><div class="ap-stat-l">novedades<br>hoy</div></div>
+                  </div>
+                </div>
+                <div class="ap-tabs">
+                  <div class="ap-tab act">Literatura</div>
+                  <div class="ap-tab">Ensayos</div>
+                </div>
+                <div class="ap-bio">Escritor y crítico literario argentino. Autor de Ciencias morales, ganadora del Premio Herralde.</div>
+                <div class="ap-cnt">
+                  <div class="ap-item"><div class="ap-thumb rd"></div><div><div class="ap-item-tag">Audio-libro · 18 min</div><div class="ap-item-ttl">Kohan lee a Kohan — Ep.5</div><div class="ap-item-sub">Nuevo episodio</div></div></div>
+                  <div class="ap-item"><div class="ap-thumb dk"></div><div><div class="ap-item-tag">Ensayo · 22 min</div><div class="ap-item-ttl">Ciencias morales: una lectura</div><div class="ap-item-sub">Editorial</div></div></div>
+                </div>
+                <span class="ap-more">2 novedades · 9 publicaciones →</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /art-sec -->
+
+        <!-- tus listas -->
+        <div class="sh rv"><div class="sh-t">Tus listas</div><span class="sh-l">Nueva +</span></div>
+        <div class="lst-wrap rv">
+          <div class="lst-card">
+            <div class="lst-ic">🔖</div>
+            <div class="lst-info"><strong>Pendientes</strong><span>12 guardados</span></div>
+            <div class="lst-count">12</div>
+          </div>
+          <div class="lst-card fo">
+            <div class="lst-ic">☆</div>
+            <div class="lst-info"><strong>Favoritos</strong><span>23 guardados</span></div>
+            <div class="lst-count">23</div>
+          </div>
+        </div>
+        <div class="lst-new rv">
+          <span style="font-size:16px;opacity:0.35">+</span>
+          <span>Nueva lista</span>
+        </div>
+
+        <!-- continuar -->
+        <div class="sh rv"><div class="sh-t">Continuar</div><span class="sh-l">Ver todo →</span></div>
+        <div class="cc rv" onclick="openM('cine')">
+          <div class="cc-th rd">Literatura</div>
+          <div class="cc-info">
+            <div class="cc-cat">Literatura</div>
+            <div class="cc-ttl">¿El cine ha muerto?</div>
+            <div class="pb-track"><div class="pb-fill" style="width:90%;background:var(--cr)"></div></div>
+            <div style="font-size:9px;color:var(--tmu);margin-top:2px;font-family:'DM Sans',sans-serif">90% · 5 min restantes</div>
+          </div>
+          <div class="cc-ply">▶</div>
+        </div>
+        <div class="cc grn rv" onclick="openM('under')">
+          <div class="cc-th gn">Música</div>
+          <div class="cc-info">
+            <div class="cc-cat">Música</div>
+            <div class="cc-ttl">El under está de moda</div>
+            <div class="pb-track"><div class="pb-fill" style="width:20%;background:var(--fo)"></div></div>
+            <div style="font-size:9px;color:var(--tmu);margin-top:2px;font-family:'DM Sans',sans-serif">20% · 10 min restantes</div>
+          </div>
+          <div class="cc-ply">▶</div>
+        </div>
+
+        <!-- quote -->
+        <div class="qb rv">
+          <div class="qb-inner">
+            <span class="qb-mark">"</span>
+            <div class="qb-t">La literatura no es una mentira, sino la forma más honesta de decir la verdad. Pero hay que entender que no todos son honestos.</div>
+            <div class="qb-author-row">
+              <div class="qb-author-av">ME</div>
+              <div class="qb-author-info">
+                <div class="qb-author-name">Mariana Enríquez</div>
+                <div class="qb-author-cat">Literatura</div>
+              </div>
+            </div>
+          </div>
+          <div class="qb-bg-word">LITERATURA</div>
+        </div>
+
+        <!-- typo band -->
+        <div class="typo-band rv">
+          <span class="typo-band-txt">música · letras · música · cine · textos · cine · letras · música · &nbsp;&nbsp;&nbsp;&nbsp;música · letras · música · cine · textos · cine · letras · música · </span>
+        </div>
+
+        <!-- tu semana -->
+        <div class="sh rv"><div class="sh-t">Tu semana</div></div>
+        <div class="st-row rv">
+          <div class="stc cr"><div class="stc-bg">4</div><div class="st-n">4</div><div class="st-l">textos leídos<br>esta semana</div></div>
+          <div class="stc fo"><div class="stc-bg">1h</div><div class="st-n">1h 42'</div><div class="st-l">tiempo de escucha<br>a diario</div></div>
+        </div>
+
+        <!-- artistas sugeridos -->
+        <div class="sh rv"><div class="sh-t">Artistas sugeridos</div><span class="sh-l">Ver más →</span></div>
+        <div class="sg-lst rv">
+          <div class="sg-it"><div class="sg-side cr"></div><div class="sg-body"><div class="sg-av cr">JM</div><div class="sg-inf"><strong>Juana Molina</strong><span>Música · Literatura · 12 publ.</span></div><div class="sg-publ">12</div><button class="btn-fw ing" onclick="tfw(this)">Siguiendo</button></div></div>
+          <div class="sg-it"><div class="sg-side fo"></div><div class="sg-body"><div class="sg-av fo">ME</div><div class="sg-inf"><strong>Mariana Enríquez</strong><span>Terror · Crónicas · 38 publ.</span></div><div class="sg-publ">38</div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div></div>
+          <div class="sg-it"><div class="sg-side pu"></div><div class="sg-body"><div class="sg-av pu">DI</div><div class="sg-inf"><strong>Dillom</strong><span>Música · Cine · 28 publ.</span></div><div class="sg-publ">28</div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div></div>
+          <div class="sg-it"><div class="sg-side bl"></div><div class="sg-body"><div class="sg-av bl">DP</div><div class="sg-inf"><strong>Diego Peretti</strong><span>Cine · Literatura · 5 publ.</span></div><div class="sg-publ">5</div><button class="btn-fw seg" onclick="tfw(this)">Seguir</button></div></div>
+        </div>
+
+        <!-- search -->
+        <div class="srch rv"><span class="srch-ic">⌕</span><span>Autores, textos, géneros...</span></div>
+
+        <!-- categorías -->
+        <div class="sh rv"><div class="sh-t">Categorías</div></div>
+        <div class="cat-grid rv">
+          <div class="ccat c1"><div class="ccat-bn">1200</div><div class="ccat-t">Literatura</div><div class="ccat-c">1200 textos</div></div>
+          <div class="ccat c2"><div class="ccat-bn">138</div><div class="ccat-t">Ensayos</div><div class="ccat-c">138 textos</div></div>
+          <div class="ccat c3"><div class="ccat-bn">63</div><div class="ccat-t">Podcast</div><div class="ccat-c">63 episodios</div></div>
+          <div class="ccat c4"><div class="ccat-bn">50</div><div class="ccat-t">Crónicas</div><div class="ccat-c">50 textos</div></div>
+        </div>
+        <div style="height:16px"></div>
+
+      </div><!-- /hm-scroll -->
+
+      <!-- bottom nav -->
+      <div class="bnav">
+        <div class="ni act">
+          <div class="ni-home-fill"></div>
+          <span class="ni-lb">Inicio</span>
+        </div>
+        <div class="ni"><span class="ni-ic">🔖</span><span class="ni-lb">Guardado</span></div>
+        <div class="ni"><span class="ni-ic">▶</span><span class="ni-lb">Escuchar</span></div>
+        <div class="ni"><span class="ni-ic">◯</span><span class="ni-lb">Perfil</span></div>
+      </div>
+    </div><!-- /pg-home -->
+
+    <!-- ══════════ MODAL ══════════ -->
+    <div class="modal-ov" id="modal" onclick="closeBg(event)">
+      <div class="modal-sh">
+        <div class="mh"></div>
+        <button class="m-cls" onclick="closeM()">✕</button>
+        <div id="mContent"></div>
+      </div>
+    </div>
+
+  </div><!-- /screen -->
+</div><!-- /phone -->
+
+<!-- nav pills (outside phone) -->
+<div class="nav-pills">
+  <span class="nav-pill act" id="pill-splash" onclick="showPage('splash')">Splash</span>
+  <span class="nav-pill"     id="pill-login"  onclick="showPage('login')">Login</span>
+  <span class="nav-pill"     id="pill-home"   onclick="showPage('home')">Home</span>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   JAVASCRIPT — navegación, animaciones,
+   interacciones
+════════════════════════════════════════ */
+
+const dl = ms => new Promise(r => setTimeout(r, ms));
+let splashRunning = false;
+
+/* ── Page navigation ── */
+function showPage(p) {
+  ['splash','login','home'].forEach(x => {
+    document.getElementById('pg-'+x).classList.remove('active','from-right','from-bottom');
+    document.getElementById('pill-'+x).classList.remove('act');
+  });
+  document.getElementById('pill-'+p).classList.add('act');
+  const pg = document.getElementById('pg-'+p);
+  pg.classList.add('active');
+  if (p === 'login')  { void pg.offsetWidth; pg.classList.add('from-right');  triggerLoginStagger(); }
+  if (p === 'home')   { void pg.offsetWidth; pg.classList.add('from-bottom'); setTimeout(initReveal, 220); }
+  if (p === 'splash') { setTimeout(restartSplash, 40); }
+}
+
+/* ── Login stagger ── */
+function triggerLoginStagger() {
+  const i = document.getElementById('lgInner');
+  i.classList.remove('go');
+  void i.offsetWidth;
+  setTimeout(() => i.classList.add('go'), 320);
+}
+
+/* ── Scroll reveal ── */
+function initReveal() {
+  const sc = document.getElementById('hmScroll');
+  sc.querySelectorAll('.rv').forEach(el => el.classList.remove('vis'));
+  const check = () => sc.querySelectorAll('.rv').forEach(el => {
+    const r = el.getBoundingClientRect(), sr = sc.getBoundingClientRect();
+    if (r.top < sr.bottom - 10) el.classList.add('vis');
+  });
+  sc.removeEventListener('scroll', check);
+  sc.addEventListener('scroll', check);
+  check();
+}
+
+/* ── Splash typewriter ── */
+function restartSplash() {
+  if (splashRunning) return;
+  document.getElementById('typed').innerHTML = '';
+  document.getElementById('cur').className = 'sp-cur';
+  document.getElementById('brL').className = 'sp-br';
+  document.getElementById('brR').className = 'sp-br';
+  document.getElementById('spTag').className = 'sp-tag';
+  const b = document.getElementById('spBar');
+  b.style.transition = 'none'; b.style.width = '0';
+  setTimeout(runSplash, 80);
+}
+
+async function runSplash() {
+  splashRunning = true;
+  const typed = document.getElementById('typed');
+  const cur   = document.getElementById('cur');
+  const brL   = document.getElementById('brL');
+  const brR   = document.getElementById('brR');
+  const tag   = document.getElementById('spTag');
+  const bar   = document.getElementById('spBar');
+
+  await dl(450);
+  brL.classList.add('v'); brR.classList.add('v');
+  await dl(180);
+
+  // Fase 1 — "índice" completo en DM Sans (palo seco)
+  // "ín" en DM Sans 500, "dice" en DM Sans 300
+  const chars = [
+    {c:'í', cls:'ch-sb'},
+    {c:'n', cls:'ch-sb'},
+    {c:'d', cls:'ch-s'},
+    {c:'i', cls:'ch-s'},
+    {c:'c', cls:'ch-s'},
+    {c:'e', cls:'ch-s'},
+  ];
+  let spans = [];
+  for (let ch of chars) {
+    if (!document.getElementById('pg-splash').classList.contains('active')) { splashRunning = false; return; }
+    const s = document.createElement('span');
+    s.className = ch.cls; s.textContent = ch.c;
+    typed.appendChild(s);
+    spans.push(s);
+    await dl(70 + Math.random() * 40);
+  }
+  await dl(680); // pausa — logo en sans visible
+
+  // Fase 2 — borra "dice" (últimas 4 letras)
+  for (let i = 0; i < 4; i++) {
+    const last = spans.pop();
+    if (last) typed.removeChild(last);
+    await dl(50 + Math.random() * 30);
+  }
+  await dl(200);
+
+  // Fase 3 — reescribe "dice" en Playfair Display italic
+  for (let c of ['d','i','c','e']) {
+    const s = document.createElement('span');
+    s.className = 'ch-i'; s.textContent = c;
+    typed.appendChild(s); spans.push(s);
+    await dl(82 + Math.random() * 35);
+  }
+
+  await dl(300);
+  cur.classList.add('off');
+  tag.classList.add('v');
+  bar.style.transition = 'width 2.5s ease';
+  bar.style.width = '100%';
+  await dl(2700);
+  splashRunning = false;
+  showPage('login');
+}
+
+/* ── Login → Home ── */
+document.getElementById('loginBtn').addEventListener('click', () => showPage('home'));
+
+/* ── Player expandido ── */
+let playerOpen = false, playing = false;
+function togglePlayer() {
+  playerOpen = !playerOpen;
+  document.getElementById('playerExp').classList.toggle('open', playerOpen);
+}
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('playBtn').textContent = playing ? '▶' : '▐▐';
+}
+
+/* ── Acordeones artistas ── */
+function togA(id) {
+  const isOpen = document.getElementById(id).classList.contains('open');
+  ['a1','a2','a3'].forEach(x => document.getElementById(x).classList.remove('open'));
+  if (!isOpen) document.getElementById(id).classList.add('open');
+}
+
+/* ── Tabs de artista ── */
+const tabData = {
+  jm: {
+    'Música':      [{c:'rd',tag:'Podcast · 32 min · 2026',ttl:'¿Qué lee un cantante?',sub:'Episodio reciente'},{c:'dk',tag:'Artículo · 6 min',ttl:'La música como segunda lengua',sub:'Esta semana'},{c:'rd',tag:'Ensayo · 30 min',ttl:'Las letras son un espejo al alma',sub:'Destacado'}],
+    'Entrevistas': [{c:'rd',tag:'Entrevista · 25 min',ttl:'Sus influencias musicales',sub:'2026'},{c:'dk',tag:'Charla · 18 min',ttl:'El proceso creativo en vivo',sub:'2025'}],
+    'Artículos':   [{c:'dk',tag:'Artículo · 6 min',ttl:'La música como segunda lengua',sub:'Esta semana'},{c:'rd',tag:'Artículo · 10 min',ttl:'Folklore y electrónica en tensión',sub:'2025'}],
+    'Crónicas':    [{c:'rd',tag:'Crónica · 8 min',ttl:'Una noche en el Konex',sub:'2026'}],
+  },
+  me: {
+    'Terror':   [{c:'rd',tag:'Cuento · 18 min',ttl:'La casa de Adela',sub:'Nuevo'},{c:'dk',tag:'Cuento · 22 min',ttl:'Chicos que vuelven',sub:'Destacado'}],
+    'Crónicas': [{c:'dk',tag:'Crónica · 12 min',ttl:'Los chicos que matan',sub:'Periodismo narrativo'},{c:'rd',tag:'Crónica · 9 min',ttl:'El barrio del fin del mundo',sub:'2025'}],
+    'Cine':     [{c:'rd',tag:'Ensayo · 15 min',ttl:'Terror argentino contemporáneo',sub:'Selección editorial'}],
+  }
+};
+
+function setTab(artist, tab, btn) {
+  const container = document.getElementById(artist + '-content');
+  if (!container) return;
+  btn.closest('.ap-tabs').querySelectorAll('.ap-tab').forEach(t => t.classList.remove('act'));
+  btn.classList.add('act');
+  const items = tabData[artist] && tabData[artist][tab];
+  if (!items) return;
+  container.innerHTML = items.map(it =>
+    `<div class="ap-item">
+      <div class="ap-thumb ${it.c}"></div>
+      <div>
+        <div class="ap-item-tag">${it.tag}</div>
+        <div class="ap-item-ttl">${it.ttl}</div>
+        <div class="ap-item-sub">${it.sub}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+/* ── Seguir/Siguiendo ── */
+function tfw(btn) {
+  const ing = btn.classList.contains('ing');
+  btn.classList.toggle('ing', !ing);
+  btn.classList.toggle('seg', ing);
+  btn.textContent = ing ? 'Seguir' : 'Siguiendo';
+}
+
+/* ── Modal bottom sheet ── */
+const mData = {
+  audio: { ttl:'Kohan lee a Kohan', sub:'Audio-libro · Martín Kohan · 6 caps',
+    items:[{c:'gn',ttl:'Cap.5 — Donde está el cuerpo',info:'18 min'},{c:'rd',ttl:'Cap.4 — El espejo partido',info:'22 min'},{c:'pu',ttl:'Cap.3 — Ciencias morales',info:'20 min'}]},
+  entre: { ttl:'Lucrecia Martel', sub:'Entrevista · Cine · 32 min',
+    items:[{c:'pu',ttl:'El sonido como narrativa',info:'32 min · entrevista'},{c:'rd',ttl:'La Ciénaga: 20 años después',info:'18 min · artículo'}]},
+  cine:  { ttl:'¿El cine ha muerto?', sub:'Literatura · Ensayo · 5 min restantes',
+    items:[{c:'rd',ttl:'Continuar la lectura',info:'5 min restantes'},{c:'gn',ttl:'Artículos relacionados',info:'Literatura · Ensayo'}]},
+  under: { ttl:'El under está de moda', sub:'Música · Crónica · 10 min restantes',
+    items:[{c:'gn',ttl:'Continuar la crónica',info:'10 min restantes'},{c:'rd',ttl:'Más de la serie',info:'Música · Crónicas'}]},
+};
+
+function openM(key) {
+  const d = mData[key]; if (!d) return;
+  let h = `<div class="m-ttl">${d.ttl}</div><div class="m-sub">${d.sub}</div>`;
+  d.items.forEach(it => {
+    h += `<div class="m-item">
+      <div class="m-thumb ${it.c}"></div>
+      <div>
+        <span class="m-item-ttl">${it.ttl}</span>
+        <span class="m-item-sub">${it.info}</span>
+      </div>
+    </div>`;
+  });
+  document.getElementById('mContent').innerHTML = h;
+  document.getElementById('modal').classList.add('open');
+}
+function closeM()  { document.getElementById('modal').classList.remove('open'); }
+function closeBg(e){ if (e.target === document.getElementById('modal')) closeM(); }
+
+/* ── Init ── */
+runSplash();
+</script>
+</body>
+</html>
