@@ -323,104 +323,44 @@ body {
 /* horizontal scroll cards */
 .hsc { padding: 0 14px; display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
 .hsc::-webkit-scrollbar { display: none; }
-/* ── MC cards ── */
 .mc {
-  flex: 0 0 108px;
-  border-radius: 14px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  height: 130px;
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 10px;
+  flex: 0 0 108px; border-radius: 14px; overflow: hidden;
+  position: relative; cursor: pointer; height: 130px; transition: transform 0.2s;
 }
-.mc:nth-child(1) { background: linear-gradient(150deg, #3d0a22, #8B1A4A); }
-.mc:nth-child(2) { background: linear-gradient(150deg, #0e2410, #2C4A2E); }
-.mc:nth-child(3) { background: linear-gradient(150deg, #1a1030, #3D2A5A); }
+
+.mc:nth-child(1) { background: linear-gradient(150deg, #3d0a22, #8B1A4A);
+   position: relative; overflow: hidden; /* recorta la imagen si sobresale */ } 
+   .mc:nth-child(1) .mc-blend-img { display: block; width: 100%; height: auto; margin-top: auto; /* empuja hacia abajo */ /* blend con el gradiente */ 
+    mix-blend-mode: luminosity; /* probá también: multiply, screen, overlay */ opacity: 0.6; /* ajustá según la imagen */ }
+
+.mc:nth-child(1) { background: linear-gradient(150deg, #0e2410, #2C4A2E); position: relative; overflow: hidden; /* recorta la imagen si sobresale */ } .mc:nth-child(1) .mc-blend-img { display: block; width: 100%; height: auto; margin-top: auto; /* empuja hacia abajo */ /* blend con el gradiente */ mix-blend-mode: luminosity; /* probá también: multiply, screen, overlay */ opacity: 0.6; /* ajustá según la imagen */ }
+
+.mc:nth-child(1) { background: linear-gradient(150deg, #1a1030, #3D2A5A
+); position: relative; overflow: hidden; /* recorta la imagen si sobresale */ } .mc:nth-child(1) .mc-blend-img { display: block; width: 100%; height: auto; margin-top: auto; /* empuja hacia abajo */ /* blend con el gradiente */ mix-blend-mode: luminosity; /* probá también: multiply, screen, overlay */ opacity: 0.6; /* ajustá según la imagen */ }
 .mc:active { transform: scale(0.93); }
-
 .mc-bg-l {
-  position: absolute;
-  inset: 0;
-  font-family: 'Playfair Display', serif;
-  font-size: 60px;
-  font-weight: 900;
-  color: rgba(255,255,255,0.06);
-  display: flex;
-  align-items: flex-end;
-  padding: 5px;
-  line-height: 1;
-  pointer-events: none;
+  position: absolute; inset: 0;
+  font-family: 'Playfair Display', serif; font-size: 60px; font-weight: 900;
+  color: rgba(255,255,255,0.06); display: flex; align-items: flex-end;
+  padding: 5px; line-height: 1; pointer-events: none;
 }
-
 .mc-in {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: relative; z-index: 1; padding: 10px;
+  height: 100%; display: flex; flex-direction: column; justify-content: flex-end;
 }
-
-/* fila superior: badge o label pequeño */
-.mc-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 7px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.38);
+.mc-tag {
+  font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38); margin-bottom: 3px; font-family: 'DM Sans', sans-serif;
 }
-
 .mc-live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  background: var(--cr);
-  border-radius: 3px;
-  padding: 2px 5px;
-  width: fit-content;
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--cr); border-radius: 3px; padding: 2px 5px;
+  margin-bottom: 4px; width: fit-content;
 }
 .mc-live-dot {
-  width: 4px; height: 4px;
-  border-radius: 50%; background: #fff;
+  width: 4px; height: 4px; border-radius: 50%; background: #fff;
   animation: ld 1.1s ease-in-out infinite;
 }
-.mc-live-txt {
-  font-size: 6.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
-}
-
-/* título central — tipografía grande tipo reloj */
-.mc-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 900;
-  color: #fff;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-/* tiempo/episodio abajo — acento de color tipo "02:30" */
-.mc-time {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.5);
-  letter-spacing: 0.04em;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding-top: 6px;
-  margin-top: 4px;
-}
-
 @keyframes ld { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 .mc-live-txt { font-size: 6.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; font-family: 'DM Sans', sans-serif; }
 .mc-tt { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: #fff; line-height: 1.3; }
@@ -600,61 +540,15 @@ padding: 10px;
 }
 @keyframes scrolltxt { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-/* ── STC stats ── */
-.st-row {
-  padding: 0 12px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.stc {
-  border-radius: 14px;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+/* stats */
+.st-row { padding: 0 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stc { border-radius: 14px; padding: 16px; text-align: center; position: relative; overflow: hidden; }
 .stc.cr { background: linear-gradient(145deg, var(--cr2), var(--cr)); }
 .stc.fo { background: linear-gradient(145deg, var(--fo), var(--fo2)); }
+.stc-bg { position: absolute; right: -8px; bottom: -8px; font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: rgba(255,255,255,0.06); line-height: 1; pointer-events: none; }
+.st-n { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: #fff; line-height: 1; position: relative; z-index: 1; }
+.st-l { font-size: 9px; color: rgba(255,255,255,0.48); margin-top: 5px; line-height: 1.45; font-family: 'DM Sans', sans-serif; position: relative; z-index: 1; }
 
-.stc-inner {
-  padding: 14px 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  position: relative;
-}
-
-/* label pequeño arriba — tipo "THU" */
-.stc-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-}
-
-/* número grande — tipo "02:30" */
-.stc-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 900;
-  color: #fff;
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-
-/* unidad abajo — tipo "AM" */
-.stc-unit {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 300;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.55);
-  margin-top: 2px;
-}
 /* artistas sugeridos */
 .sg-lst { padding: 0 14px; }
 .sg-it {
@@ -877,34 +771,34 @@ padding: 10px;
           <div class="hero-mt">Tap para comenzar →</div>
         </div>
 
-        <!-- PARA ESCUCHAR mc  -->
-<div class="mc" onclick="togglePlayer()">
-  <div class="mc-bg-l">P</div>
-  <div class="mc-in">
-    <div class="mc-live-badge"><div class="mc-live-dot"></div><span class="mc-live-txt">En vivo</span></div>
-    <div class="mc-label">Podcast · Música</div>
-    <div class="mc-title">El oficio<br>de escribir</div>
-    <div class="mc-time">32:10</div>
-  </div>
-</div>
-
-<div class="mc" onclick="openM('audio')">
-  <div class="mc-bg-l">A</div>
-  <div class="mc-in">
-    <div class="mc-label">Audio-libro</div>
-    <div class="mc-title">Kohan lee<br>a Kohan</div>
-    <div class="mc-time">Ep. 5</div>
-  </div>
-</div>
-
-<div class="mc" onclick="openM('entre')">
-  <div class="mc-bg-l">E</div>
-  <div class="mc-in">
-    <div class="mc-label">Entrevista</div>
-    <div class="mc-title">Lucrecia<br>Martel</div>
-    <div class="mc-time">32 min</div>
-  </div>
-</div>
+        <!-- para escuchar -->
+        <div class="sh rv"><div class="sh-t">Para escuchar</div><span class="sh-l">Ver todo →</span></div>
+        <div class="hsc rv">
+          <div class="mc" onclick="togglePlayer()">
+            <div class="mc-bg-l">P</div>
+            <div class="mc-in">
+              <div class="mc-live-badge"><div class="mc-live-dot"></div><span class="mc-live-txt">En vivo</span></div>
+              <div class="mc-tt">El oficio de escribir</div>
+              <div class="mc-sb">Podcast · Música</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('audio')">
+            <div class="mc-bg-l">A</div>
+            <div class="mc-in">
+              <span class="mc-tag">Audio-libro</span>
+              <div class="mc-tt">Kohan lee a Kohan</div>
+              <div class="mc-sb">Ep. 5</div>
+            </div>
+          </div>
+          <div class="mc" onclick="openM('entre')">
+            <div class="mc-bg-l">E</div>
+            <div class="mc-in">
+              <span class="mc-tag">Entrevista</span>
+              <div class="mc-tt">Lucrecia Martel</div>
+              <div class="mc-sb">32 min</div>
+            </div>
+          </div>
+        </div>
 
         <!-- player expandido -->
         <div class="player-exp rv" id="playerExp">
@@ -1216,7 +1110,7 @@ function restartSplash() {
   document.getElementById('spTag').className = 'sp-tag';
   const b = document.getElementById('spBar');
   b.style.transition = 'none'; b.style.width = '0';
-  setTimeout(runSplash, 60);
+  setTimeout(runSplash, 80);
 }
 
 async function runSplash() {
